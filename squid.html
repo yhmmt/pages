@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="generator" content="pandoc" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+                                        <style>
+         code{white-space: pre-wrap;}
+         span.smallcaps{font-variant: small-caps;}
+         div.columns{display: flex; gap: min(4vw, 1.5em);}
+         div.column{flex: auto; overflow-x: auto;}
+         div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+         /* The extra [class] is a hack that increases specificity enough to
+            override a similar rule in reveal.js */
+         ul.task-list[class]{list-style: none;}
+         ul.task-list li input[type="checkbox"] {
+           font-size: inherit;
+           width: 0.8em;
+           margin: 0 0.8em 0.2em -1.6em;
+           vertical-align: middle;
+         }
+         .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+        </style>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@3.0.1/github-markdown.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+                <link rel="stylesheet" href="style.css" />
+        <title>SQUID</title>
+                            </head>
+    <body>
+        <article class="markdown-body">
+                                    <header id="title-block-header">
+                <h1 class="title">SQUID</h1>
+                                                            </header>
+                                    <h2 id="初期設定">初期設定</h2>
+                                    <h3 id="参考">参考</h3>
+                                    <ul>
+                                    <li><a
+                                    href="https://www.hpc.cmc.osaka-u.ac.jp/system/manual/squid-use/login/">ログイン方法(SQUID)</a></li>
+                                    </ul>
+                                    <h3
+                                    id="google-authenticatorのインストール">Google
+                                    Authenticatorのインストール</h3>
+                                    <ul>
+                                    <li>iPhoneでApp
+                                    Storeからインストール</li>
+                                    </ul>
+                                    <h3
+                                    id="二段階認証の設定">二段階認証の設定</h3>
+                                    <pre><code>$ ssh アカウント名@squidhpc.hpc.cmc.osaka-u.ac.jp
+...
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added &#39;squidhpc.hpc.cmc.osaka-u.ac.jp&#39; (ED25519) to the list of known hosts.
+(アカウント名@squidhpc.hpc.cmc.osaka-u.ac.jp) Password: 事前に設定したパスワードを入力
+ Initialize google-authenticator
+...
+QRコードが表示されるのでGoogle Authenticatorでスキャンする
+...
+Enter code from app (-1 to skip): -1
+Code confirmation skipped
+Your emergency scratch codes are:
+ Completed to initialized google-authenticator
+ After logout, and please relogin. It will be authenticated &#39;OTP&#39; by Google Authenticator.
+Hit [Enter] key
+Connection to squidhpc.hpc.cmc.osaka-u.ac.jp closed.</code></pre>
+                                    <h3
+                                    id="squidにログイン">SQUIDにログイン</h3>
+                                    <pre><code>$ ssh アカウント名@squidhpc.hpc.cmc.osaka-u.ac.jp
+(アカウント名@squidhpc.hpc.cmc.osaka-u.ac.jp) Password: 事前に設定したパスワードを入力
+(アカウント名@squidhpc.hpc.cmc.osaka-u.ac.jp) Verification code: Google Authenticatorに表示された6桁の数字を入力
+[アカウント名@squidhpc3 ~]$</code></pre>
+                                    <h2
+                                    id="利用者の追加">利用者の追加</h2>
+                                    <h3 id="参考-1">参考</h3>
+                                    <ul>
+                                    <li><a
+                                    href="https://manage.hpc.cmc.osaka-u.ac.jp/saibed/">利用者管理WEBシステム</a></li>
+                                    <li><a
+                                    href="https://www.hpc.cmc.osaka-u.ac.jp/wp-content/uploads/2014/10/118.pdf">グループ利用者管理手順（登録、削除、情報変更）</a></li>
+                                    <li>ウェブサイトから必要事項を記入して追加申請</li>
+                                    </ul>
+                                    <h2
+                                    id="利用状況の確認">利用状況の確認</h2>
+                                    <pre><code>$ usage_view
+
+---------------+ Group: G16193 +---------------
+
+[Group summary]
+
+          SQUID points   HDD(GiB)   SSD(GiB)
+------- -------------- ---------- ----------
+usage              0.0        0.0        0.0
+limit           5250.0     5120.0        0.0
+remain          5250.0     5120.0        0.0
+rate(%)            0.0        0.0        0.0
+
+
+[Detail]
+
+          SQUID points     Home(GiB)   HDD(GiB)   SSD(GiB)
+------- -------------- ------------- ---------- ----------
+v60916             0.0   0.0 /  10.0        0.0        0.0
+
+
+[Node-hours]
+
+                            Usage     Available*
+------------------ -------------- --------------
+CPU           node           0.00       20601.96
+GPU           node           0.00        3366.29
+Vector        node           0.00        5460.10
+
+ * Available Node-hour is estimated based on remains of SQUID, Bonus point.
+</code></pre>
+                    </article>
+    </body>
+</html>
