@@ -73,10 +73,11 @@ $ autoreconf -i
 $ ./configure CC=icc CFLAG=&quot;-O2 -fPIC&quot; --enable-shared --disable-fortran --prefix=/sqfs/home/ユーザ名/lib/libxc-4.3.4
 $ make
 $ make check
-make[4]: ディレクトリ &#39;/sqfs2/cmc/0/home/v60916/src/libxc-4.3.4/testsuite&#39; に入ります</code></pre>
+make[4]: ディレクトリ &#39;/sqfs2/cmc/0/home/ユーザ名/src/libxc-4.3.4/testsuite&#39; に入ります</code></pre>
                                     <p><code>make check</code>でフリーズするのでCtrl+Cで止める。</p>
                                     <pre><code>$ make install</code></pre>
                                     <h2 id="sqlite3">Sqlite3</h2>
+                                    <p>後述のGPAWのテストで必要になるSqlite3をインストールする。</p>
                                     <pre><code>$ cd ~
 $ mkdir -p local/src
 $ cd local/src
@@ -106,7 +107,7 @@ $ pyenv install 3.8
 Downloading Python-3.8.20.tar.xz...
 ...
 $ pyenv versions
-* system (set by /sqfs/home/v60916/.pyenv/version)
+* system (set by /sqfs/home/ユーザ名/.pyenv/version)
   3.8.20
 $ pyenv global 3.8.20
 $ python -V
@@ -169,13 +170,14 @@ setuptools      41.2.0
 six             1.15.0
 toml            0.10.2</code></pre>
                                     <h2 id="gpaw">GPAW</h2>
-                                    <p>GPAW 20.10.0をビルドする。</p>
+                                    <p>GPAW
+                                    20.10.0のソースコードを準備する。</p>
                                     <pre><code>(...) $ mkdir -p ~/GPAW/src
 (...) $ cd ~/GPAW/src
 (...) $ wget https://pypi.org/packages/source/g/gpaw/gpaw-20.10.0.tar.gz
 (...) $ tar xzvf gpaw-20.10.0.tar.gz
 (...) $ cd gpaw-20.10.0</code></pre>
-                                    <p><code>siteconfig_20250719.py</code>を入手して<code>gpaw-20.10.0</code>に保存する。</p>
+                                    <p><code>siteconfig_20250719.py</code>を<code>gpaw-20.10.0</code>に保存してgpawをインストールする。</p>
                                     <pre><code>(...) $ ln -fs siteconfig_20250719.py siteconfig.py
 (...) $ python setup.py build
 (...) $ python setup.py install</code></pre>
@@ -193,12 +195,12 @@ Available setups and pseudopotentials
       https://wiki.fysik.dtu.dk/gpaw-files/gpaw-setups-0.5.3574.tar.gz
 
 Selected gpaw-setups-0.9.20000.tar.gz.  Downloading...
-Extracting tarball into /sqfs/home/v60916/lib
-Setups installed into /sqfs/home/v60916/lib/gpaw-setups-0.9.20000.
-Register this setup path in /sqfs/home/v60916/.gpaw/rc.py? [y/n] y
-Setup path registered in /sqfs/home/v60916/.gpaw/rc.py.
+Extracting tarball into /sqfs/home/ユーザ名/lib
+Setups installed into /sqfs/home/ユーザ名/lib/gpaw-setups-0.9.20000.
+Register this setup path in /sqfs/home/ユーザ名/.gpaw/rc.py? [y/n] y
+Setup path registered in /sqfs/home/ユーザ名/.gpaw/rc.py.
 Current GPAW setup paths in order of search priority:
-   1. /sqfs/home/v60916/lib/gpaw-setups-0.9.20000
+   1. /sqfs/home/ユーザ名/lib/gpaw-setups-0.9.20000
 Installation complete.</code></pre>
                                     <h3
                                     id="gpawのテスト">GPAWのテスト</h3>
