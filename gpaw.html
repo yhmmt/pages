@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="generator" content="pandoc" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+                                        <style>
+         code{white-space: pre-wrap;}
+         span.smallcaps{font-variant: small-caps;}
+         div.columns{display: flex; gap: min(4vw, 1.5em);}
+         div.column{flex: auto; overflow-x: auto;}
+         div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+         /* The extra [class] is a hack that increases specificity enough to
+            override a similar rule in reveal.js */
+         ul.task-list[class]{list-style: none;}
+         ul.task-list li input[type="checkbox"] {
+           font-size: inherit;
+           width: 0.8em;
+           margin: 0 0.8em 0.2em -1.6em;
+           vertical-align: middle;
+         }
+         .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+        </style>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@3.0.1/github-markdown.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+                <link rel="stylesheet" href="style.css" />
+        <title>GPAW</title>
+                            </head>
+    <body>
+        <article class="markdown-body">
+                                    <header id="title-block-header">
+                <h1 class="title">GPAW</h1>
+                                                            </header>
+                                    <p>SQUIDに第一原理計算コードGPAWをインストールする方法を説明する。</p>
+                                    <h2 id="モジュール">モジュール</h2>
+                                    <p>コンパイラ等を読み込む。</p>
+                                    <pre><code>$ module list
+No Modulefiles Currently Loaded.
+$ module avail
+----------------------------------------------- /system/apps/env/Base -----------------------------------------------
+BaseApp/2021           BaseExtra/2023           BaseGPU/2025(default)    BasePy/2022
+BaseApp/2022           BaseExtra/2024           BaseJDK/2021             BasePy/2023
+BaseApp/2023           BaseExtra/2025(default)  BaseJDK/2022             BasePy/2024
+BaseApp/2024           BaseGCC/2021             BaseJDK/2023             BasePy/2025(default)
+BaseApp/2025(default)  BaseGCC/2022             BaseJDK/2024             BaseR/2021
+BaseCPU/2021           BaseGCC/2023             BaseJDK/2025(default)    BaseR/2022
+BaseCPU/2022           BaseGCC/2024             BaseJulia/2021           BaseR/2023
+BaseCPU/2023           BaseGCC/2025(default)    BaseJulia/2022           BaseR/2024
+BaseCPU/2024           BaseGPU/2021             BaseJulia/2023           BaseR/2025(default)
+BaseCPU/2025(default)  BaseGPU/2022             BaseJulia/2024           BaseVEC/2023
+BaseExtra/2021         BaseGPU/2023             BaseJulia/2025(default)  BaseVEC/2024
+BaseExtra/2022         BaseGPU/2024             BasePy/2021              BaseVEC/2025(default)
+$ $ module load BaseCPU/2022
+Loading compiler version 2023.0.0
+...
+$ module list
+Currently Loaded Modulefiles:
+ 1) inteloneAPI/2023.0   5) compiler/latest   9) dal/latest                13) mkl/latest       17) BaseCPU/2022
+ 2) tbb/latest           6) mpi/latest       10) inspector/latest          14) vtune/latest
+ 3) compiler-rt/latest   7) advisor/latest   11) intel_ipp_intel64/latest  15) debugger/latest
+ 4) oclfpga/latest       8) clck/latest      12) itac/latest               16) dpl/latest</code></pre>
+                                    <h2 id="libxc">Libxc</h2>
+                                    <p>交換相関汎関数ライブラリをインストールする。</p>
+                                    <pre><code>$ cd
+$ mkdir src lib
+$ cd src
+$ wget https://gitlab.com/libxc/libxc/-/archive/4.3.4/libxc-4.3.4.tar.bz2
+$ ls
+libxc-4.3.4.tar.bz2
+$ tar jxvf libxc-4.3.4.tar.bz2
+$ cd libxc-4.3.4
+$ autoreconf -i
+$ ./configure CC=icc CFLAG=&quot;-O2 -fPIC&quot; --enable-shared --disable-fortran --prefix=/sqfs/home/ユーザ名/lib/libxc-4.3.4
+$ make
+$ make check
+make[4]: ディレクトリ &#39;/sqfs2/cmc/0/home/v60916/src/libxc-4.3.4/testsuite&#39; に入ります</code></pre>
+                                    <p><code>make check</code>でフリーズするのでCtrl+Cで止める。</p>
+                                    <pre><code>$ make install</code></pre>
+                                    <h2 id="sqlite3">Sqlite3</h2>
+                                    <pre><code>$ cd ~
+$ mkdir -p local/src
+$ cd local/src
+$ wget https://www.sqlite.org/2024/sqlite-autoconf-3450200.tar.gz
+$ tar xzvf sqlite-autoconf-3450200.tar.gz
+$ cd sqlite-autoconf-3450200
+$ ./configure --prefix=$HOME/local
+$ make -j4
+$ make install</code></pre>
+                                    <h2 id="python">Python</h2>
+                                    <p>SQUIDのデフォルトはPython
+                                    3.6。</p>
+                                    <pre><code>$ python3 -V
+Python 3.6.8</code></pre>
+                                    <p>pyenvをインストールする。</p>
+                                    <pre><code>$ git clone https://github.com/pyenv/pyenv.git ~/.pyenv</code></pre>
+                                    <p>以下を~/.bashrcに追記する。</p>
+                                    <pre><code>export PYENV_ROOT=$HOME/.pyenv
+export PATH=$PYENV_ROOT/bin:$PATH
+if command -v pyenv 1&gt;/dev/null 2&gt;&amp;1; then
+  eval &quot;$(pyenv init -)&quot;
+fi</code></pre>
+                                    <p>pyenvでPython
+                                    3.8をインストールする。</p>
+                                    <pre><code>$ source ~/.bashrc
+$ pyenv install 3.8
+Downloading Python-3.8.20.tar.xz...
+...
+$ pyenv versions
+* system (set by /sqfs/home/v60916/.pyenv/version)
+  3.8.20
+$ pyenv global 3.8.20
+$ python -V
+Python 3.8.20</code></pre>
+                                    <h2
+                                    id="pythonライブラリ">Pythonライブラリ</h2>
+                                    <p>以下を<code>~/requirements.txt</code>に保存する。</p>
+                                    <pre><code>ase==3.20.1
+attrs==20.3.0
+cycler==0.10.0
+cymem==2.0.5
+Cython==0.29.21
+decorator==4.4.2
+iniconfig==1.1.1
+kiwisolver==1.3.1
+matplotlib==3.3.3
+mpi4py==3.0.3
+numpy==1.19.5
+packaging==20.8
+Pillow==8.1.0
+pluggy==0.13.1
+py==1.10.0
+pyparsing==2.4.7
+pytest==6.2.1
+python-dateutil==2.8.1
+scipy==1.5.4
+setuptools==41.2.0
+six==1.15.0
+toml==0.10.2</code></pre>
+                                    <p>仮想環境を作ってGPAWに必要なライブラリをインストールする。</p>
+                                    <pre><code>$ cd
+$ python -m venv py38env
+$ source ~/py38env/bin/activate
+(...) $ pip install --upgrade pip
+(...) $ pip install -r requirements.txt
+(...) $ pip list
+Package             Version
+--------------- -------
+ase             3.20.1
+attrs           20.3.0
+cycler          0.10.0
+cymem           2.0.5
+Cython          0.29.21
+decorator       4.4.2
+iniconfig       1.1.1
+kiwisolver      1.3.1
+matplotlib      3.3.3
+mpi4py          3.0.3
+numpy           1.19.5
+packaging       20.8
+Pillow          8.1.0
+pip             25.0.1
+pluggy          0.13.1
+py              1.10.0
+pyparsing       2.4.7
+pytest          6.2.1
+python-dateutil 2.8.1
+scipy           1.5.4
+setuptools      41.2.0
+six             1.15.0
+toml            0.10.2</code></pre>
+                                    <h2 id="gpaw">GPAW</h2>
+                                    <p>GPAW 20.10.0をビルドする。</p>
+                                    <pre><code>(...) $ mkdir -p ~/GPAW/src
+(...) $ cd ~/GPAW/src
+(...) $ wget https://pypi.org/packages/source/g/gpaw/gpaw-20.10.0.tar.gz
+(...) $ tar xzvf gpaw-20.10.0.tar.gz
+(...) $ cd gpaw-20.10.0</code></pre>
+                                    <p><code>siteconfig_20250719.py</code>を入手して<code>gpaw-20.10.0</code>に保存する。</p>
+                                    <pre><code>(...) $ ln -fs siteconfig_20250719.py siteconfig.py
+(...) $ python setup.py build
+(...) $ python setup.py install</code></pre>
+                                    <h2 id="設定データ">設定データ</h2>
+                                    <p>PAWの設定データ<code>gpaw-setups-0.9.20000</code>をインストールする。</p>
+                                    <pre><code>$ gpaw install-data --version=0.9.20000 ~/lib
+Available setups and pseudopotentials
+      https://wiki.fysik.dtu.dk/gpaw-files/gpaw-setups-24.11.0.tar.gz
+      https://wiki.fysik.dtu.dk/gpaw-files/gpaw-setups-24.1.0.tar.gz
+  [*] https://wiki.fysik.dtu.dk/gpaw-files/gpaw-setups-0.9.20000.tar.gz
+      https://wiki.fysik.dtu.dk/gpaw-files/gpaw-setups-0.9.11271.tar.gz
+      https://wiki.fysik.dtu.dk/gpaw-files/gpaw-setups-0.9.9672.tar.gz
+      https://wiki.fysik.dtu.dk/gpaw-files/gpaw-setups-0.8.7929.tar.gz
+      https://wiki.fysik.dtu.dk/gpaw-files/gpaw-setups-0.6.6300.tar.gz
+      https://wiki.fysik.dtu.dk/gpaw-files/gpaw-setups-0.5.3574.tar.gz
+
+Selected gpaw-setups-0.9.20000.tar.gz.  Downloading...
+Extracting tarball into /sqfs/home/v60916/lib
+Setups installed into /sqfs/home/v60916/lib/gpaw-setups-0.9.20000.
+Register this setup path in /sqfs/home/v60916/.gpaw/rc.py? [y/n] y
+Setup path registered in /sqfs/home/v60916/.gpaw/rc.py.
+Current GPAW setup paths in order of search priority:
+   1. /sqfs/home/v60916/lib/gpaw-setups-0.9.20000
+Installation complete.</code></pre>
+                                    <h3
+                                    id="gpawのテスト">GPAWのテスト</h3>
+                                    <p>以下を<code>gpaw-20.10.0/run.sh</code>に保存する。</p>
+                                    <pre><code>#!/bin/bash
+#------- qsub option -----------
+#PBS -q SQUID
+#PBS --group=グループ名
+#PBS -m b
+#PBS -l cpunum_job=76
+#PBS -l elapstim_req=23:30:00
+#------- Program execution -----------
+module load BaseCPU/2022 #ベース環境をロードします
+cd $PBS_O_WORKDIR        #qsub実行時のカレントディレクトリへ移動
+~/py38env/bin/pytest -v &gt; pytest.log</code></pre>
+                                    <p>テストを実行する。　</p>
+                                    <pre><code>$ qsub run.sh
+$ tail -f pytest.log
+============================= test session starts ==============================
+platform linux -- Python 3.8.20, pytest-6.2.1, py-1.10.0, pluggy-0.13.1 -- /sqfs2/cmc/0/home/ユーザ名/py38env/bin/pytho
+n
+cachedir: .pytest_cache
+rootdir: /sqfs2/cmc/0/home/ユーザ名/GPAW/src/gpaw-20.10.0
+collecting ... collected 402 items
+
+gpaw/test/test_AA_enthalpy.py::test_exx_AA_enthalpy SKIPPED (world.s...) [  0%]
+...
+gpaw/test/xc/test_xcatom.py::test_xc_xcatom PASSED                       [100%]
+
+=============================== warnings summary ===============================
+...
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+================================ GPAW-MPI stuff ================================
+size: 1
+==== 366 passed, 35 skipped, 1 xfailed, 107 warnings in 2397.42s (0:39:57) =====</code></pre>
+                    </article>
+    </body>
+</html>
