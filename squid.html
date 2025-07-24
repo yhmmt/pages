@@ -31,6 +31,7 @@
                                     <header id="title-block-header">
                 <h1 class="title">SQUID</h1>
                                                             </header>
+                                    <p>大阪大学D3センター大規模計算機システムSQUIDの使用方法を説明する。</p>
                                     <h2 id="初期設定">初期設定</h2>
                                     <h3 id="参考">参考</h3>
                                     <ul>
@@ -46,11 +47,11 @@
                                     </ul>
                                     <h3
                                     id="二段階認証の設定">二段階認証の設定</h3>
-                                    <pre><code>$ ssh アカウント名@squidhpc.hpc.cmc.osaka-u.ac.jp
+                                    <pre><code>$ ssh ユーザ名@squidhpc.hpc.cmc.osaka-u.ac.jp
 ...
 Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
 Warning: Permanently added &#39;squidhpc.hpc.cmc.osaka-u.ac.jp&#39; (ED25519) to the list of known hosts.
-(アカウント名@squidhpc.hpc.cmc.osaka-u.ac.jp) Password: 事前に設定したパスワードを入力
+(ユーザ名@squidhpc.hpc.cmc.osaka-u.ac.jp) Password: 事前に設定したパスワードを入力
  Initialize google-authenticator
 ...
 QRコードが表示されるのでGoogle Authenticatorでスキャンする
@@ -64,10 +65,10 @@ Hit [Enter] key
 Connection to squidhpc.hpc.cmc.osaka-u.ac.jp closed.</code></pre>
                                     <h3
                                     id="squidにログイン">SQUIDにログイン</h3>
-                                    <pre><code>$ ssh アカウント名@squidhpc.hpc.cmc.osaka-u.ac.jp
-(アカウント名@squidhpc.hpc.cmc.osaka-u.ac.jp) Password: 事前に設定したパスワードを入力
-(アカウント名@squidhpc.hpc.cmc.osaka-u.ac.jp) Verification code: Google Authenticatorに表示された6桁の数字を入力
-[アカウント名@squidhpc3 ~]$</code></pre>
+                                    <pre><code>$ ssh ユーザ名@squidhpc.hpc.cmc.osaka-u.ac.jp
+(ユーザ名@squidhpc.hpc.cmc.osaka-u.ac.jp) Password: 事前に設定したパスワードを入力
+(ユーザ名@squidhpc.hpc.cmc.osaka-u.ac.jp) Verification code: Google Authenticatorに表示された6桁の数字を入力
+[ユーザ名@squidhpc3 ~]$</code></pre>
                                     <h2
                                     id="利用者の追加">利用者の追加</h2>
                                     <h3 id="参考-1">参考</h3>
