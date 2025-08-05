@@ -111,6 +111,9 @@ fi</code></pre>
                                     <p>PyenvでPython
                                     3.8をインストールする。</p>
                                     <pre><code>$ source ~/.bashrc
+$ export LDFLAGS=&quot;-L$HOME/local/lib&quot;
+$ export CPPFLAGS=&quot;-I$HOME/local/include&quot;
+$ export PKG_CONFIG_PATH=&quot;$HOME/local/lib/pkgconfig&quot;
 $ pyenv install 3.8
 Downloading Python-3.8.20.tar.xz...
 ...
