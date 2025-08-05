@@ -81,8 +81,9 @@ $ make check
 make[4]: ディレクトリ &#39;/sqfs2/cmc/0/home/ユーザ名/src/libxc-4.3.4/testsuite&#39; に入ります</code></pre>
                                     <p><code>make check</code>でフリーズしたらCtrl+Cで止める。</p>
                                     <pre><code>$ make install</code></pre>
-                                    <h2 id="sqlite3">Sqlite3</h2>
-                                    <p>ここでは後述のGPAWのテストで必要になるSqlite3をインストールする。</p>
+                                    <h2
+                                    id="sqlite3とtcltk">Sqlite3とTcl/Tk</h2>
+                                    <p>ここでは後述のPythonのインストールで必要になるSqlite3とTcl/Tkをインストールする。</p>
                                     <p>Sqlite3のソースコードを<code>~/local/src</code>にダウンロードして展開する。</p>
                                     <pre><code>$ cd ~
 $ mkdir -p local/src
@@ -94,9 +95,26 @@ $ tar xzvf sqlite-autoconf-3450200.tar.gz</code></pre>
 $ ./configure --prefix=$HOME/local
 $ make -j4
 $ make install</code></pre>
-                                    <h2 id="python">Python</h2>
-                                    <p>ここではGPAWで用いるPyshon
-                                    3.8をインストールする。</p>
+                                    <p>Tclのソースコードを<code>~/local/src</code>にダウンロードして展開する。</p>
+                                    <pre><code>$ cd ~/local/src
+$ wget https://prdownloads.sourceforge.net/tcl/tcl8.6.13-src.tar.gz
+$ tar xzvf tcl8.6.13-src.tar.gz</code></pre>
+                                    <p>Tclを<code>~/local/src/tcl8.6.13/unix</code>でコンパイルし、<code>~/local</code>にインストールする。</p>
+                                    <pre><code>$ cd tcl8.6.13/unix
+$ ./configure --prefix=$HOME/local
+$ make -j4
+$ make install</code></pre>
+                                    <p>Tclと同じバージョンのTkのソースコードを<code>~/local/src</code>にダウンロードして展開する。</p>
+                                    <pre><code>$ cd ~/local/src
+$ wget https://prdownloads.sourceforge.net/tcl/tk8.6.13-src.tar.gz
+$ tar xzvf tk8.6.13-src.tar.gz</code></pre>
+                                    <p>Tkを<code>~/local/src/tk8.6.13/unix</code>でコンパイルし、<code>~/local</code>にインストールする。</p>
+                                    <pre><code>$ cd tk8.6.13/unix
+$ ./configure --prefix=$HOME/local --with-tcl=$HOME/local/lib
+$ make -j4
+$ make install</code></pre>
+                                    <h2 id="pyenv">Pyenv</h2>
+                                    <p>ここではPythonのバージョン管理に必要なPyenvをインストールする。</p>
                                     <p>SQUIDのPythonのバージョンを確認する。</p>
                                     <pre><code>$ python3 -V
 Python 3.6.8</code></pre>
@@ -108,13 +126,15 @@ export PATH=$PYENV_ROOT/bin:$PATH
 if command -v pyenv 1&gt;/dev/null 2&gt;&amp;1; then
   eval &quot;$(pyenv init -)&quot;
 fi</code></pre>
-                                    <p>PyenvでPython
-                                    3.8をインストールする。</p>
-                                    <pre><code>$ source ~/.bashrc
+                                    <p><code>~/.bashrc</code>を読み込んでPyenvを使えるようにする。</p>
+                                    <h2 id="python">Python</h2>
+                                    <p>ここではGPAWで用いるPyshon
+                                    3.8をPyenvでインストールする。</p>
+                                    <pre><code>$ export LD_LIBRARY_PATH=&quot;$HOME/local/lib:$LD_LIBRARY_PATH&quot;
 $ export LDFLAGS=&quot;-L$HOME/local/lib&quot;
 $ export CPPFLAGS=&quot;-I$HOME/local/include&quot;
 $ export PKG_CONFIG_PATH=&quot;$HOME/local/lib/pkgconfig&quot;
-$ pyenv install 3.8
+$ PYTHON_CONFIGURE_OPTS=&quot;--with-tcltk-includes=&#39;-I$HOME/local/include&#39; --with-tcltk-libs=&#39;-L$HOME/local/lib&#39;&quot; pyenv install 3.8
 Downloading Python-3.8.20.tar.xz...
 ...
 $ pyenv versions
