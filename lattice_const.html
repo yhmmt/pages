@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="generator" content="pandoc" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+                                        <style>
+         code{white-space: pre-wrap;}
+         span.smallcaps{font-variant: small-caps;}
+         div.columns{display: flex; gap: min(4vw, 1.5em);}
+         div.column{flex: auto; overflow-x: auto;}
+         div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+         /* The extra [class] is a hack that increases specificity enough to
+            override a similar rule in reveal.js */
+         ul.task-list[class]{list-style: none;}
+         ul.task-list li input[type="checkbox"] {
+           font-size: inherit;
+           width: 0.8em;
+           margin: 0 0.8em 0.2em -1.6em;
+           vertical-align: middle;
+         }
+         .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+        </style>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@3.0.1/github-markdown.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <title>格子定数</title>
+        <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+                <link rel="stylesheet" href="style.css" />
+                            </head>
+    <body>
+        <article class="markdown-body">
+                                    <header id="title-block-header">
+                <h1 class="title">格子定数</h1>
+                                                            </header>
+                                    <p><a
+                                    href="squid.html">SQUID</a>にインストールした<a
+                                    href="gpaw.html">GPAW</a>で格子定数を計算する方法を説明する。</p>
+                                    <h2 id="計算条件">計算条件</h2>
+                                    <ul>
+                                    <li>Agの面心立方格子</li>
+                                    <li>LCAOのdzp基底</li>
+                                    <li>PBE交換相関汎関数</li>
+                                    <li>16x16x16k点サンプリング</li>
+                                    </ul>
+                                    <h2
+                                    id="サンプルスクリプト">サンプルスクリプト</h2>
+                                    <p>次のスクリプトを<code>input.py</code>に保存する。</p>
+                                    <p>格子定数の目安を4.15
+                                    Åとして99%〜101%の範囲で変化させる。</p>
+                                    <pre class="prettyprint"><code>from ase.build import bulk
+from gpaw import GPAW, MethfesselPaxton, Mixer
+from ase.io import Trajectory
+from gpaw.utilities import h2gpts
+from gpaw import extra_parameters
+extra_parameters[&#39;blacs&#39;] = True
+import numpy as np
+
+a0 = 4.15
+traj = Trajectory(&#39;ag.traj&#39;, &#39;w&#39;)
+
+for eps in np.linspace(-0.01, 0.01, 21):
+    a = (1 + eps) * a0
+    ag = bulk(&#39;Ag&#39;, &#39;fcc&#39;, a=a)
+    ag.calc = GPAW(mode=&#39;lcao&#39;, basis=&#39;dzp&#39;, xc=&#39;PBE&#39;,
+               occupations=MethfesselPaxton(0.05, order=1), maxiter=999,
+               mixer=Mixer(nmaxold=5, beta=0.05, weight=75),
+               nbands=10, kpts=(16, 16, 16), txt = &#39;eval_eps%.3f.txt&#39; % eps)
+
+    ag.get_potential_energy()
+    traj.write(ag)</code></pre>
+                                    <h3 id="参考">参考</h3>
+                                    <ul>
+                                    <li><a
+                                    href="https://wiki.fysik.dtu.dk/ase/tutorials/lattice_constant.html">Finding
+                                    lattice constants using EOS and the
+                                    stress tensor</a></li>
+                                    </ul>
+                                    <h2
+                                    id="ジョブスクリプト">ジョブスクリプト</h2>
+                                    <p>次のスクリプトを<code>run.sh</code>に保存する。</p>
+                                    <pre class="prettyprint"><code>#!/bin/bash
+#------- qsub option -----------
+#PBS -q SQUID
+#PBS --group=グループ名
+#PBS -m be
+#PBS -M メールアドレス
+#PBS -l cpunum_job=76
+#PBS -l elapstim_req=1:00:00
+#PBS -N AgBulkLCAO
+#PBS -T intmpi
+#PBS -v OMP_NUM_THREADS=1
+#------- Program execution -----------
+module load BaseCPU/2022
+cd $PBS_O_WORKDIR
+mpirun ${NQSV_MPIOPTS} -np 64 /sqfs2/cmc/0/home/ユーザ名/py38env/bin/python input.py</code></pre>
+                                    <p>ジョブを投入する。</p>
+                                    <pre class="console"><code>$ qsub run.sh</code></pre>
+                                    <h2
+                                    id="格子定数の計算">格子定数の計算</h2>
+                                    <p>次のスクリプトを<code>lattice_const.py</code>に保存する。</p>
+                                    <pre class="prettyprint"><code>import sys
+from ase.io import read
+
+filename = sys.argv[1]
+traj = read(filename, index=&#39;:&#39;)
+
+for atoms in traj:
+    lc = atoms.cell[0][1] * 2
+    energy = atoms.get_potential_energy()
+    print(f&#39;{lc:20.12f}{energy:20.12f}&#39;)</code></pre>
+                                    <p><code>ag.traj</code>から格子定数とエネルギーを抜き出して<code>lc.dat</code>に書き出す。</p>
+                                    <pre class="console"><code>$ source ~/py38env/bin/activate
+(...) $ python lattice_const.py ag.traj &gt; lc.dat</code></pre>
+                                    <p>最小値の近傍の5点を<code>lc5.dat</code>に保存して二次関数でフィットする。</p>
+                                    <pre class="console"><code>$ gnuplot
+gnuplot&gt; f(x)=a*x*x+b*x+c
+gnuplot&gt; fit f(x) &quot;lc5.dat&quot; via a,b,c
+...
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+a               = 2.7434           +/- 0.02527      (0.9212%)
+b               = -22.7427         +/- 0.2096       (0.9214%)
+c               = 44.6212          +/- 0.4344       (0.9735%)
+...
+gnuplot&gt; print -b/2/a
+4.14498365156092</code></pre>
+                                    <div style="text-align: center;">
+                                    <p><img src="lc_ag.png" /></p>
+                                    </div>
+                    </article>
+    </body>
+</html>

@@ -3,3 +3,13 @@ article {
     margin: 0 auto;
     padding: 40px 0;
 }
+
+.console {
+    color:#fff;
+    background-color:#1d2020 !important;
+}
+
+pre.prettyprint {
+    padding: 16px;
+    border: none;
+}

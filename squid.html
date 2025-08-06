@@ -23,31 +23,43 @@
         </style>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@3.0.1/github-markdown.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-                <link rel="stylesheet" href="style.css" />
         <title>SQUID</title>
+        <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+                <link rel="stylesheet" href="style.css" />
                             </head>
     <body>
         <article class="markdown-body">
                                     <header id="title-block-header">
                 <h1 class="title">SQUID</h1>
                                                             </header>
-                                    <p>大阪大学D3センター大規模計算機システムSQUIDの使用方法を説明する。</p>
-                                    <h2 id="初期設定">初期設定</h2>
-                                    <h3 id="参考">参考</h3>
-                                    <ul>
-                                    <li><a
-                                    href="https://www.hpc.cmc.osaka-u.ac.jp/system/manual/squid-use/login/">ログイン方法(SQUID)</a></li>
-                                    </ul>
-                                    <h3
-                                    id="google-authenticatorのインストール">Google
-                                    Authenticatorのインストール</h3>
-                                    <ul>
-                                    <li>iPhoneでApp
-                                    Storeからインストール</li>
-                                    </ul>
-                                    <h3
-                                    id="二段階認証の設定">二段階認証の設定</h3>
-                                    <pre><code>$ ssh ユーザ名@squidhpc.hpc.cmc.osaka-u.ac.jp
+                                    <nav id="TOC" role="doc-toc">
+                                <ul>
+                                <li><a href="#初期設定"
+                                id="toc-初期設定">初期設定</a></li>
+                                <li><a href="#利用者の追加"
+                                id="toc-利用者の追加">利用者の追加</a></li>
+                                <li><a href="#利用状況の確認"
+                                id="toc-利用状況の確認">利用状況の確認</a></li>
+                                <li><a href="#ジョブの投入のコツ"
+                                id="toc-ジョブの投入のコツ">ジョブの投入のコツ</a></li>
+                                </ul>
+            </nav>
+                        <p>大阪大学D3センター大規模計算機システムSQUIDの使用方法を説明する。</p>
+                        <h2 id="初期設定">初期設定</h2>
+                        <p>二段階認証でSQUIDにログインできるようにする。</p>
+                        <h3 id="参考">参考</h3>
+                        <ul>
+                        <li><a
+                        href="https://www.hpc.cmc.osaka-u.ac.jp/system/manual/squid-use/login/">ログイン方法(SQUID)</a></li>
+                        </ul>
+                        <h3
+                        id="google-authenticatorのインストール">Google
+                        Authenticatorのインストール</h3>
+                        <p>iPhoneでApp Storeを開いてGoogle
+                        Authenticatorをインストールする</p>
+                        <h3 id="二段階認証の設定">二段階認証の設定</h3>
+                        <p><code>ssh</code>で初めてSQUIDにログインするとき、パスワードを入力すると二段階認証の設定が始まる。</p>
+                        <pre class="console"><code>$ ssh ユーザ名@squidhpc.hpc.cmc.osaka-u.ac.jp
 ...
 Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
 Warning: Permanently added &#39;squidhpc.hpc.cmc.osaka-u.ac.jp&#39; (ED25519) to the list of known hosts.
@@ -63,25 +75,25 @@ Your emergency scratch codes are:
  After logout, and please relogin. It will be authenticated &#39;OTP&#39; by Google Authenticator.
 Hit [Enter] key
 Connection to squidhpc.hpc.cmc.osaka-u.ac.jp closed.</code></pre>
-                                    <h3
-                                    id="squidにログイン">SQUIDにログイン</h3>
-                                    <pre><code>$ ssh ユーザ名@squidhpc.hpc.cmc.osaka-u.ac.jp
+                        <h3 id="squidにログイン">SQUIDにログイン</h3>
+                        <p>次回以降<code>ssh</code>でSQUIDにログインするときは、パスワードに加えて認証コードを入力する。</p>
+                        <pre class="console"><code>$ ssh ユーザ名@squidhpc.hpc.cmc.osaka-u.ac.jp
 (ユーザ名@squidhpc.hpc.cmc.osaka-u.ac.jp) Password: 事前に設定したパスワードを入力
 (ユーザ名@squidhpc.hpc.cmc.osaka-u.ac.jp) Verification code: Google Authenticatorに表示された6桁の数字を入力
 [ユーザ名@squidhpc3 ~]$</code></pre>
-                                    <h2
-                                    id="利用者の追加">利用者の追加</h2>
-                                    <h3 id="参考-1">参考</h3>
-                                    <ul>
-                                    <li><a
-                                    href="https://manage.hpc.cmc.osaka-u.ac.jp/saibed/">利用者管理WEBシステム</a></li>
-                                    <li><a
-                                    href="https://www.hpc.cmc.osaka-u.ac.jp/wp-content/uploads/2014/10/118.pdf">グループ利用者管理手順（登録、削除、情報変更）</a></li>
-                                    <li>ウェブサイトから必要事項を記入して追加申請</li>
-                                    </ul>
-                                    <h2
-                                    id="利用状況の確認">利用状況の確認</h2>
-                                    <pre><code>$ usage_view
+                        <h2 id="利用者の追加">利用者の追加</h2>
+                        <p>ウェブサイトからグループ利用者を追加する。</p>
+                        <h3 id="参考-1">参考</h3>
+                        <ul>
+                        <li><a
+                        href="https://manage.hpc.cmc.osaka-u.ac.jp/saibed/">利用者管理WEBシステム</a></li>
+                        <li><a
+                        href="https://www.hpc.cmc.osaka-u.ac.jp/wp-content/uploads/2014/10/118.pdf">グループ利用者管理手順（登録、削除、情報変更）</a></li>
+                        <li>ウェブサイトから必要事項を記入して追加申請</li>
+                        </ul>
+                        <h2 id="利用状況の確認">利用状況の確認</h2>
+                        <p>ポイントとストレージの利用状況は<code>usage_view</code>で確認できる。</p>
+                        <pre class="console"><code>$ usage_view
 
 ---------------+ Group: G16193 +---------------
 
@@ -112,6 +124,17 @@ Vector        node           0.00        5460.10
 
  * Available Node-hour is estimated based on remains of SQUID, Bonus point.
 </code></pre>
+                        <h2
+                        id="ジョブの投入のコツ">ジョブの投入のコツ</h2>
+                        <p>elapstim_reqが長いと待ち時間が長くなる可能性があるので、
+                        予め計算時間を見積もっておいて、elapstim_reqはそれより少し長く設定する。</p>
+                        <h3 id="参考-2">参考</h3>
+                        <ul>
+                        <li><a
+                        href="https://squidportal.hpc.cmc.osaka-u.ac.jp/portal/login">SQUIDポータル</a></li>
+                        <li><a
+                        href="https://www.hpc.cmc.osaka-u.ac.jp/system/manual/reducing-wait-time/">計算の実行待ち時間を短縮するために</a></li>
+                        </ul>
                     </article>
     </body>
 </html>

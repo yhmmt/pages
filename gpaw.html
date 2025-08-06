@@ -23,22 +23,47 @@
         </style>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@3.0.1/github-markdown.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-                <link rel="stylesheet" href="style.css" />
         <title>GPAW</title>
+        <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+                <link rel="stylesheet" href="style.css" />
                             </head>
     <body>
         <article class="markdown-body">
                                     <header id="title-block-header">
                 <h1 class="title">GPAW</h1>
                                                             </header>
-                                    <p>SQUIDに第一原理計算コードGPAWをインストールする方法を説明する。</p>
-                                    <h2 id="環境設定">環境設定</h2>
-                                    <p>ここではLibxcやGPAWのコンパイルで必要なコンパイラを読み込む。</p>
-                                    <p>初期設定では何も読み込まれていない。</p>
-                                    <pre><code>$ module list
+                                    <nav id="TOC" role="doc-toc">
+                                <ul>
+                                <li><a href="#環境設定"
+                                id="toc-環境設定">環境設定</a></li>
+                                <li><a href="#libxc"
+                                id="toc-libxc">Libxc</a></li>
+                                <li><a href="#sqlite3"
+                                id="toc-sqlite3">Sqlite3</a></li>
+                                <li><a href="#tcltk"
+                                id="toc-tcltk">Tcl/Tk</a></li>
+                                <li><a href="#pyenv"
+                                id="toc-pyenv">Pyenv</a></li>
+                                <li><a href="#python"
+                                id="toc-python">Python</a></li>
+                                <li><a href="#pythonライブラリ"
+                                id="toc-pythonライブラリ">Pythonライブラリ</a></li>
+                                <li><a href="#gpaw"
+                                id="toc-gpaw">GPAW</a></li>
+                                <li><a href="#設定データ"
+                                id="toc-設定データ">設定データ</a></li>
+                                <li><a href="#テスト計算"
+                                id="toc-テスト計算">テスト計算</a></li>
+                                </ul>
+            </nav>
+                        <p>SQUIDに第一原理計算コードGPAWをインストールする方法を説明する。</p>
+                        <h2 id="環境設定">環境設定</h2>
+                        <p>LibxcやGPAWのコンパイルで必要なコンパイラを読み込む。</p>
+                        <p>初期設定では何も読み込まれていない。</p>
+                        <pre class="console"><code>$ module list
 No Modulefiles Currently Loaded.</code></pre>
-                                    <p><code>module avail</code>で利用できるモジュールを確認する。</p>
-                                    <pre><code>$ module avail
+                        <p><code>module avail</code>で利用できるモジュールを確認する。</p>
+                        <pre class="console"><code>$ module avail
 ----------------------------------------------- /system/apps/env/Base -----------------------------------------------
 BaseApp/2021           BaseExtra/2023           BaseGPU/2025(default)    BasePy/2022
 BaseApp/2022           BaseExtra/2024           BaseJDK/2021             BasePy/2023
@@ -52,8 +77,8 @@ BaseCPU/2024           BaseGPU/2021             BaseJulia/2023           BaseR/2
 BaseCPU/2025(default)  BaseGPU/2022             BaseJulia/2024           BaseVEC/2023
 BaseExtra/2021         BaseGPU/2023             BaseJulia/2025(default)  BaseVEC/2024
 BaseExtra/2022         BaseGPU/2024             BasePy/2021              BaseVEC/2025(default)</code></pre>
-                                    <p><code>BaseCPU/2022</code>に含まれるコンパイラを読み込む。</p>
-                                    <pre><code>$ module load BaseCPU/2022
+                        <p><code>BaseCPU/2022</code>を読み込む。</p>
+                        <pre class="console"><code>$ module load BaseCPU/2022
 Loading compiler version 2023.0.0
 ...
 $ module list
@@ -62,93 +87,102 @@ Currently Loaded Modulefiles:
  2) tbb/latest           6) mpi/latest       10) inspector/latest          14) vtune/latest
  3) compiler-rt/latest   7) advisor/latest   11) intel_ipp_intel64/latest  15) debugger/latest
  4) oclfpga/latest       8) clck/latest      12) itac/latest               16) dpl/latest</code></pre>
-                                    <h2 id="libxc">Libxc</h2>
-                                    <p>ここでは交換相関汎関数ライブラリをインストールする。</p>
-                                    <p>Libxcのソースコードを<code>~/src/lib</code>にダウンロードして展開する。</p>
-                                    <pre><code>$ cd
+                        <h2 id="libxc">Libxc</h2>
+                        <p>交換相関汎関数ライブラリをインストールする。</p>
+                        <p>Libxcのソースコードを<code>~/src/lib</code>にダウンロードして展開する。</p>
+                        <pre class="console"><code>$ cd
 $ mkdir src lib
 $ cd src
 $ wget https://gitlab.com/libxc/libxc/-/archive/4.3.4/libxc-4.3.4.tar.bz2
 $ ls
 libxc-4.3.4.tar.bz2
 $ tar jxvf libxc-4.3.4.tar.bz2</code></pre>
-                                    <p>Libxcを<code>~/src/libxc-4.3.4</code>内でコンパイルし、<code>~/lib/libxc-4.3.4</code>にインストールする。</p>
-                                    <pre><code>$ cd libxc-4.3.4
+                        <p>Libxcを<code>~/src/libxc-4.3.4</code>でコンパイルし、<code>~/lib/libxc-4.3.4</code>にインストールする。</p>
+                        <pre class="console"><code>$ cd libxc-4.3.4
 $ autoreconf -i
 $ ./configure CC=icc CFLAG=&quot;-O2 -fPIC&quot; --enable-shared --disable-fortran --prefix=/sqfs/home/ユーザ名/lib/libxc-4.3.4
 $ make
 $ make check
 make[4]: ディレクトリ &#39;/sqfs2/cmc/0/home/ユーザ名/src/libxc-4.3.4/testsuite&#39; に入ります</code></pre>
-                                    <p><code>make check</code>でフリーズしたらCtrl+Cで止める。</p>
-                                    <pre><code>$ make install</code></pre>
-                                    <h2
-                                    id="sqlite3とtcltk">Sqlite3とTcl/Tk</h2>
-                                    <p>ここでは後述のPythonのインストールで必要になるSqlite3とTcl/Tkをインストールする。</p>
-                                    <p>Sqlite3のソースコードを<code>~/local/src</code>にダウンロードして展開する。</p>
-                                    <pre><code>$ cd ~
+                        <p><code>make check</code>でフリーズするのでCtrl+Cで止める。</p>
+                        <pre class="console"><code>$ make install</code></pre>
+                        <h2 id="sqlite3">Sqlite3</h2>
+                        <p>Pythonのインストールで必要になるSqlite3をインストールする。</p>
+                        <p>Sqlite3のソースコードを<code>~/local/src</code>にダウンロードして展開する。</p>
+                        <pre class="console"><code>$ cd ~
 $ mkdir -p local/src
 $ cd local/src
 $ wget https://www.sqlite.org/2024/sqlite-autoconf-3450200.tar.gz
 $ tar xzvf sqlite-autoconf-3450200.tar.gz</code></pre>
-                                    <p>Sqlite3を<code>~/local/src/sqlite-autoconf-3450200</code>でコンパイルし、<code>~/local</code>にインストールする。</p>
-                                    <pre><code>$ cd sqlite-autoconf-3450200
+                        <p>Sqlite3を<code>~/local/src/sqlite-autoconf-3450200</code>でコンパイルし、<code>~/local</code>にインストールする。</p>
+                        <pre class="console"><code>$ cd sqlite-autoconf-3450200
 $ ./configure --prefix=$HOME/local
 $ make -j4
 $ make install</code></pre>
-                                    <p>Tclのソースコードを<code>~/local/src</code>にダウンロードして展開する。</p>
-                                    <pre><code>$ cd ~/local/src
+                        <h2 id="tcltk">Tcl/Tk</h2>
+                        <p>Pythonのインストールで必要になるTcl/Tkをインストールする。</p>
+                        <p>Tclのソースコードを<code>~/local/src</code>にダウンロードして展開する。</p>
+                        <pre class="console"><code>$ cd ~/local/src
 $ wget https://prdownloads.sourceforge.net/tcl/tcl8.6.13-src.tar.gz
 $ tar xzvf tcl8.6.13-src.tar.gz</code></pre>
-                                    <p>Tclを<code>~/local/src/tcl8.6.13/unix</code>でコンパイルし、<code>~/local</code>にインストールする。</p>
-                                    <pre><code>$ cd tcl8.6.13/unix
+                        <p>Tclを<code>~/local/src/tcl8.6.13/unix</code>でコンパイルし、<code>~/local</code>にインストールする。</p>
+                        <pre class="console"><code>$ cd tcl8.6.13/unix
 $ ./configure --prefix=$HOME/local
 $ make -j4
 $ make install</code></pre>
-                                    <p>Tclと同じバージョンのTkのソースコードを<code>~/local/src</code>にダウンロードして展開する。</p>
-                                    <pre><code>$ cd ~/local/src
+                        <p>Tclと同じバージョンのTkのソースコードを<code>~/local/src</code>にダウンロードして展開する。</p>
+                        <pre class="console"><code>$ cd ~/local/src
 $ wget https://prdownloads.sourceforge.net/tcl/tk8.6.13-src.tar.gz
 $ tar xzvf tk8.6.13-src.tar.gz</code></pre>
-                                    <p>Tkを<code>~/local/src/tk8.6.13/unix</code>でコンパイルし、<code>~/local</code>にインストールする。</p>
-                                    <pre><code>$ cd tk8.6.13/unix
+                        <p>Tkを<code>~/local/src/tk8.6.13/unix</code>でコンパイルし、<code>~/local</code>にインストールする。</p>
+                        <pre class="console"><code>$ cd tk8.6.13/unix
 $ ./configure --prefix=$HOME/local --with-tcl=$HOME/local/lib
 $ make -j4
 $ make install</code></pre>
-                                    <h2 id="pyenv">Pyenv</h2>
-                                    <p>ここではPythonのバージョン管理に必要なPyenvをインストールする。</p>
-                                    <p>SQUIDのPythonのバージョンを確認する。</p>
-                                    <pre><code>$ python3 -V
+                        <h2 id="pyenv">Pyenv</h2>
+                        <p>Pythonのバージョン管理に必要なPyenvをインストールする。</p>
+                        <p>SQUIDのPythonのバージョンを確認する。</p>
+                        <pre class="console"><code>$ python3 -V
 Python 3.6.8</code></pre>
-                                    <p>Pyenvをインストールする。</p>
-                                    <pre><code>$ git clone https://github.com/pyenv/pyenv.git ~/.pyenv</code></pre>
-                                    <p>以下を<code>~/.bashrc</code>に追記する。</p>
-                                    <pre><code>export PYENV_ROOT=$HOME/.pyenv
+                        <p>Pyenvをインストールする。</p>
+                        <pre class="console"><code>$ git clone https://github.com/pyenv/pyenv.git ~/.pyenv</code></pre>
+                        <p>以下を<code>~/.bashrc</code>に追記する。</p>
+                        <pre class="prettyprint"><code>export PYENV_ROOT=$HOME/.pyenv
 export PATH=$PYENV_ROOT/bin:$PATH
 if command -v pyenv 1&gt;/dev/null 2&gt;&amp;1; then
   eval &quot;$(pyenv init -)&quot;
 fi</code></pre>
-                                    <p><code>~/.bashrc</code>を読み込んでPyenvを使えるようにする。</p>
-                                    <h2 id="python">Python</h2>
-                                    <p>ここではGPAWで用いるPyshon
-                                    3.8をPyenvでインストールする。</p>
-                                    <pre><code>$ export LD_LIBRARY_PATH=&quot;$HOME/local/lib:$LD_LIBRARY_PATH&quot;
+                        <p><code>~/.bashrc</code>を読み込んでPyenvを使えるようにする。</p>
+                        <pre class="console"><code>$ source ~/.bashrc</code></pre>
+                        <h2 id="python">Python</h2>
+                        <p>GPAWで用いるPyshon
+                        3.8をPyenvでインストールする。</p>
+                        <pre class="console"><code>$ export LD_LIBRARY_PATH=&quot;$HOME/local/lib:$LD_LIBRARY_PATH&quot;
 $ export LDFLAGS=&quot;-L$HOME/local/lib&quot;
 $ export CPPFLAGS=&quot;-I$HOME/local/include&quot;
 $ export PKG_CONFIG_PATH=&quot;$HOME/local/lib/pkgconfig&quot;
 $ PYTHON_CONFIGURE_OPTS=&quot;--with-tcltk-includes=&#39;-I$HOME/local/include&#39; --with-tcltk-libs=&#39;-L$HOME/local/lib&#39;&quot; pyenv install 3.8
 Downloading Python-3.8.20.tar.xz...
-...
-$ pyenv versions
+...</code></pre>
+                        <p>Pythonのバージョンを3.8.20に設定する。</p>
+                        <pre class="console"><code>$ pyenv versions
 * system (set by /sqfs/home/ユーザ名/.pyenv/version)
-  3.8.20</code></pre>
-                                    <p>Pythonのバージョンを3.8.20に設定する。</p>
-                                    <pre><code>$ pyenv global 3.8.20
+  3.8.20
+$ pyenv global 3.8.20
+$ pyenv versions
+  system (set by /sqfs/home/ユーザ名/.pyenv/version)
+* 3.8.20
 $ python -V
 Python 3.8.20</code></pre>
-                                    <h2
-                                    id="pythonライブラリ">Pythonライブラリ</h2>
-                                    <p>ここではGPAWの実行に必要なPythonライブラリをインストールする。</p>
-                                    <p>以下を<code>~/requirements.txt</code>に保存する。</p>
-                                    <pre><code>ase==3.20.1
+                        <p>Tcl/TkがPythonに組み込まれていたら、テスト用のウィンドウが表示できる。</p>
+                        <pre class="console"><code>$ python -m tkinter</code></pre>
+                        <div style="text-align: center;">
+                        <p><img src="tkinter_test.png" /></p>
+                        </div>
+                        <h2 id="pythonライブラリ">Pythonライブラリ</h2>
+                        <p>GPAWの実行に必要なPythonライブラリをインストールする。</p>
+                        <p>以下を<code>~/requirements.txt</code>に保存する。</p>
+                        <pre class="console"><code>ase==3.20.1
 attrs==20.3.0
 cycler==0.10.0
 cymem==2.0.5
@@ -170,12 +204,12 @@ scipy==1.5.4
 setuptools==41.2.0
 six==1.15.0
 toml==0.10.2</code></pre>
-                                    <p>仮想環境を<code>~/py38env</code>に作って有効化する。</p>
-                                    <pre><code>$ cd
+                        <p>仮想環境を<code>py38env</code>を作って有効化する。</p>
+                        <pre class="console"><code>$ cd
 $ python -m venv py38env
 $ source ~/py38env/bin/activate</code></pre>
-                                    <p><code>~/requirements.txt</code>に書かれたライブラリを仮想環境にインストールする。</p>
-                                    <pre><code>(...) $ pip install --upgrade pip
+                        <p><code>~/requirements.txt</code>に書かれたライブラリを仮想環境にインストールする。</p>
+                        <pre class="console"><code>(...) $ pip install --upgrade pip
 (...) $ pip install -r requirements.txt
 (...) $ pip list
 Package             Version
@@ -203,25 +237,42 @@ scipy           1.5.4
 setuptools      41.2.0
 six             1.15.0
 toml            0.10.2</code></pre>
-                                    <h2 id="gpaw">GPAW</h2>
-                                    <p>ここではGPAWをインストールする。</p>
-                                    <p>GPAW
-                                    20.10.0のソースコードを<code>~/GPAW/src</code>にダウンロードして展開する。</p>
-                                    <pre><code>(...) $ mkdir -p ~/GPAW/src
+                        <p>仮想環境を消去するには<code>~/py38env</code>を削除すればよい。</p>
+                        <h2 id="gpaw">GPAW</h2>
+                        <p>GPAWをSQUIDに最適化するためにソースコードからインストールする。</p>
+                        <p>GPAW
+                        20.10.0のソースコードを<code>~/GPAW/src</code>にダウンロードして展開する。</p>
+                        <pre class="console"><code>(...) $ mkdir -p ~/GPAW/src
 (...) $ cd ~/GPAW/src
 (...) $ wget https://pypi.org/packages/source/g/gpaw/gpaw-20.10.0.tar.gz
 (...) $ tar xzvf gpaw-20.10.0.tar.gz</code></pre>
-                                    <p>手元のPCから<code>siteconfig_20250719.py</code>を<code>~/GPAW/src/gpaw-20.10.0</code>にアップロードする。</p>
-                                    <pre><code>$ scp siteconfig_20250719.py ユーザ名@squidhpc.hpc.cmc.osaka-u.ac.jp:~/GPAW/src/gpaw-20.10.0</code></pre>
-                                    <p><code>siteconfig_20250719.py</code>へのリンク<code>siteconfig.py</code>を作ってGPAWをインストールする。</p>
-                                    <pre><code>(...) $ cd gpaw-20.10.0
+                        <p>手元のPCから<code>siteconfig_20250719.py</code>を<code>~/GPAW/src/gpaw-20.10.0</code>にアップロードする。</p>
+                        <pre class="console"><code>$ scp siteconfig_20250719.py ユーザ名@squidhpc.hpc.cmc.osaka-u.ac.jp:~/GPAW/src/gpaw-20.10.0</code></pre>
+                        <p><code>siteconfig_20250719.py</code>へのリンク<code>siteconfig.py</code>を作り、GPAWをインストールする。</p>
+                        <pre class="console"><code>(...) $ cd gpaw-20.10.0
 (...) $ ln -fs siteconfig_20250719.py siteconfig.py
 (...) $ python setup.py build
 (...) $ python setup.py install</code></pre>
-                                    <h2 id="設定データ">設定データ</h2>
-                                    <p>ここではPAWの設定データをインストールする。</p>
-                                    <p><code>gpaw-setups-0.9.20000</code>を<code>~/lib</code>にインストールする。</p>
-                                    <pre><code>$ gpaw install-data --version=0.9.20000 ~/lib
+                        <p><code>pip</code>で<code>gpaw</code>が表示されるようになる。</p>
+                        <pre class="console"><code>(...) $ pip list
+...
+gpaw            20.10.0
+...
+(...) $ pip show gpaw
+Name: gpaw
+Version: 20.10.0
+Summary: GPAW: DFT and beyond within the projector-augmented wave method
+Home-page: https://wiki.fysik.dtu.dk/gpaw
+Author:
+Author-email:
+License: GPLv3+
+Location: /sqfs2/cmc/0/home/ユーザ名/py38env/lib/python3.8/site-packages
+Requires: ase
+Required-by:</code></pre>
+                        <h2 id="設定データ">設定データ</h2>
+                        <p>PAWの設定データをインストールする。</p>
+                        <p><code>gpaw-setups-0.9.20000</code>を<code>~/lib</code>にインストールする。</p>
+                        <pre class="console"><code>$ gpaw install-data --version=0.9.20000 ~/lib
 Available setups and pseudopotentials
       https://wiki.fysik.dtu.dk/gpaw-files/gpaw-setups-24.11.0.tar.gz
       https://wiki.fysik.dtu.dk/gpaw-files/gpaw-setups-24.1.0.tar.gz
@@ -240,22 +291,22 @@ Setup path registered in /sqfs/home/ユーザ名/.gpaw/rc.py.
 Current GPAW setup paths in order of search priority:
    1. /sqfs/home/ユーザ名/lib/gpaw-setups-0.9.20000
 Installation complete.</code></pre>
-                                    <h2 id="テスト計算">テスト計算</h2>
-                                    <p>ここではGPAWが正常に動作するか確認する。</p>
-                                    <p>以下のジョブスクリプトを<code>~/GPAW/src/gpaw-20.10.0/run.sh</code>に保存する。</p>
-                                    <pre><code>#!/bin/bash
+                        <h2 id="テスト計算">テスト計算</h2>
+                        <p>GPAWが正常に動作するか確認する。</p>
+                        <p>以下のジョブスクリプトを<code>~/GPAW/src/gpaw-20.10.0/run.sh</code>に保存する。</p>
+                        <pre class="prettyprint"><code>#!/bin/bash
 #------- qsub option -----------
 #PBS -q SQUID
 #PBS --group=グループ名
 #PBS -m b
 #PBS -l cpunum_job=76
-#PBS -l elapstim_req=23:30:00
+#PBS -l elapstim_req=1:00:00
 #------- Program execution -----------
 module load BaseCPU/2022 #ベース環境をロードします
 cd $PBS_O_WORKDIR        #qsub実行時のカレントディレクトリへ移動
 ~/py38env/bin/pytest -v &gt; pytest.log</code></pre>
-                                    <p>ジョブをsubmitしてGPAWのテスト計算を実行する。</p>
-                                    <pre><code>$ qsub run.sh
+                        <p>ジョブをsubmitしてGPAWのテスト計算を実行する。</p>
+                        <pre class="console"><code>$ qsub run.sh
 $ tail -f pytest.log
 ============================= test session starts ==============================
 platform linux -- Python 3.8.20, pytest-6.2.1, py-1.10.0, pluggy-0.13.1 -- /sqfs2/cmc/0/home/ユーザ名/py38env/bin/pytho

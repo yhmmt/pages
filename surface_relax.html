@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="generator" content="pandoc" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+                                        <style>
+         code{white-space: pre-wrap;}
+         span.smallcaps{font-variant: small-caps;}
+         div.columns{display: flex; gap: min(4vw, 1.5em);}
+         div.column{flex: auto; overflow-x: auto;}
+         div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+         /* The extra [class] is a hack that increases specificity enough to
+            override a similar rule in reveal.js */
+         ul.task-list[class]{list-style: none;}
+         ul.task-list li input[type="checkbox"] {
+           font-size: inherit;
+           width: 0.8em;
+           margin: 0 0.8em 0.2em -1.6em;
+           vertical-align: middle;
+         }
+         .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+        </style>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@3.0.1/github-markdown.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <title>表面緩和</title>
+        <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+                <link rel="stylesheet" href="style.css" />
+                            </head>
+    <body>
+        <article class="markdown-body">
+                                    <header id="title-block-header">
+                <h1 class="title">表面緩和</h1>
+                                                            </header>
+                                    <p><a
+                                    href="squid.html">SQUID</a>にインストールした<a
+                                    href="gpaw.html">GPAW</a>で表面緩和を実行する方法を説明する。</p>
+                                    <h2 id="計算条件">計算条件</h2>
+                                    <ul>
+                                    <li>Ag(111)-(1x1)単位胞</li>
+                                    <li>3層スラブのうち最下層を固定</li>
+                                    <li>LCAOのdzp基底</li>
+                                    <li>PBE交換相関汎関数</li>
+                                    <li>24x24x1k点サンプリング</li>
+                                    </ul>
+                                    <h2
+                                    id="サンプルスクリプト">サンプルスクリプト</h2>
+                                    <p>次のスクリプトを<code>input.py</code>に保存する。</p>
+                                    <pre class="prettyprint"><code>from ase.io import write
+from ase.build import fcc111
+from ase.constraints import FixAtoms
+from ase.optimize import QuasiNewton
+from ase.parallel import paropen as open
+from gpaw import GPAW, MethfesselPaxton, Mixer
+from gpaw import extra_parameters
+extra_parameters[&#39;blacs&#39;] = True
+import numpy as np
+
+a = 4.14498365156092
+vac = 3.0
+ag = fcc111(&#39;Ag&#39;, size=(1,1,3), a=a, vacuum=vac)
+ag.cell[2,2] += 4.0
+ag.set_constraint(FixAtoms(range(0,1)))
+system = ag
+system.calc = GPAW(mode=PW(400), xc=&#39;PBE&#39;,
+                   occupations=MethfesselPaxton(0.05, order=1), maxiter=999,
+                   mixer=Mixer(nmaxold=5, beta=0.05, weight=75),
+                   nbands=&#39;110%&#39;, kpts=(24, 24, 1), txt = &#39;eval.txt&#39;,
+                   parallel={&#39;sl_auto&#39;:True})
+
+fd = open(&#39;optimization.txt&#39;, &#39;w&#39;)
+
+print(system.get_positions(), file=fd)
+print(system.get_potential_energy(), file=fd)
+
+relax = QuasiNewton(system, logfile=&#39;qn.log&#39;)
+relax.run(fmax=0.02)
+print(file=fd)
+print(system.get_positions(), file=fd)
+print(system.get_potential_energy(), file=fd)
+fd.close()
+
+write(&#39;ag.traj&#39;, system)</code></pre>
+                                    <p>ジョブスクリプトは<a
+                                    href="lattice_const.html">格子定数</a>を計算したときと同じファイルを使う。</p>
+                                    <h2
+                                    id="表面構造の変化">表面構造の変化</h2>
+                                    <p>表面緩和前後の原子座標とエネルギーは<code>optimization.txt</code>に書かれている。</p>
+                                    <pre class="console"><code>$ cat optimization.txt
+[[1.46547302 0.84609124 3.        ]
+ [0.         1.69218249 5.39310743]
+ [0.         0.         7.78621485]]
+-6.83449250941794
+
+[[ 1.46547302e+00  8.46091245e-01  3.00000000e+00]
+ [-9.07751113e-22  1.69218249e+00  5.39600102e+00]
+ [ 6.00195386e-19  0.00000000e+00  7.79266054e+00]]
+-6.834636822900305
+</code></pre>
+                    </article>
+    </body>
+</html>
