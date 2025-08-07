@@ -23,53 +23,66 @@
         </style>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@3.0.1/github-markdown.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-                <link rel="stylesheet" href="style.css" />
         <title>GOFEE</title>
+        <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+                <link rel="stylesheet" href="style.css" />
                             </head>
     <body>
         <article class="markdown-body">
                                     <header id="title-block-header">
                 <h1 class="title">GOFEE</h1>
                                                             </header>
-                                    <p>SQUIDに構造探索プログラムGOFEEの使用方法を説明する。</p>
-                                    <p>事前に<a
-                                    href="gpaw.html">ここ</a>でGPAWをインストールしておく。</p>
-                                    <h2
-                                    id="インストール">インストール</h2>
-                                    <p>GOFEEのソースコードを<code>~/GPAW/src</code>にダウンロードして展開する。</p>
-                                    <pre class="console"><code>$ cd
+                                    <nav id="TOC" role="doc-toc">
+                                <ul>
+                                <li><a href="#インストール"
+                                id="toc-インストール">インストール</a></li>
+                                <li><a href="#テスト計算"
+                                id="toc-テスト計算">テスト計算</a></li>
+                                <li><a href="#analyze-multiple-results"
+                                id="toc-analyze-multiple-results">Analyze
+                                multiple results</a></li>
+                                <li><a href="#learn-more-about-gofee"
+                                id="toc-learn-more-about-gofee">Learn
+                                more about GOFEE</a></li>
+                                </ul>
+            </nav>
+                        <p><a
+                        href="squid.html">SQUID</a>にインストールした<a
+                        href="gpaw.html">GPAW</a>でGOFEEによる構造探索を実行する方法を説明する。</p>
+                        <h2 id="インストール">インストール</h2>
+                        <p>GOFEEのソースコードを<code>~/GPAW/src</code>にダウンロードして展開する。</p>
+                        <pre class="console"><code>$ cd
 $ source ~/py38env/bin/activate
 (...) $ cd GPAW/src
 (...) $ wget http://grendel-www.cscaa.dk/mkb/_downloads/920d389b1e05cf17f747d8e1eb83f642/gofee.tar.gz
 (...) $ tar xzvf gofee.tar.gz</code></pre>
-                                    <p>GPFEEを<code>~/GPAW/src/gofee</code>でコンパイルする。</p>
-                                    <pre><code>(...) $ cd gofee
+                        <p>GPFEEを<code>~/GPAW/src/gofee</code>でコンパイルする。</p>
+                        <pre class="console"><code>(...) $ cd gofee
 (...) $ ./build_code</code></pre>
-                                    <h2 id="テスト計算">テスト計算</h2>
-                                    <p>ここではベンゼンのサンプルを用いてGOFEEが正しく動作するか確認する。</p>
-                                    <pre class="console"><code>$ cd ~/GPAW/src/gofee/test_systems/C6H6</code></pre>
-                                    <p>GOFEEのディレクトリ構造が変更されたので、<code>run_search.py</code>を以下のように修正する。</p>
-                                    <p>Line 8:</p>
-                                    <pre class="prettyprint"><code>from gofee.surrogate.gpr import GPR</code></pre>
-                                    <p>Line 12:</p>
-                                    <pre class="prettyprint"><code>from gofee.candidates.candidate_generation import CandidateGenerator, StartGenerator</code></pre>
-                                    <p>Line 13:</p>
-                                    <pre class="prettyprint"><code>from gofee.candidates.basic_mutations import RattleMutation, RattleMutation2, PermutationMutation</code></pre>
-                                    <p>Line 16:</p>
-                                    <pre class="prettyprint"><code>from gofee.gofee import GOFEE</code></pre>
-                                    <p>Lines 41-42:</p>
-                                    <pre class="prettyprint"><code>calc=GPAW(mode = &#39;lcao&#39;,</code></pre>
-                                    <p>Line 57:</p>
-                                    <pre class="prettyprint"><code>               candidate_generator=mutationSelector,</code></pre>
-                                    <p>Line 58:</p>
-                                    <pre class="prettyprint"><code>               max_steps=300,</code></pre>
-                                    <p>Line 59:</p>
-                                    <pre class="prettyprint"><code>               # dmax_cov=2.5,</code></pre>
-                                    <p>To run GOFEE, save the following
-                                    script as, e.g.,
-                                    <code>run.csh</code> in the current
-                                    directory</p>
-                                    <pre class="prettyprint"><code>#!/bin/csh
+                        <h2 id="テスト計算">テスト計算</h2>
+                        <p>ここではベンゼンのサンプルを用いてGOFEEが正しく動作するか確認する。</p>
+                        <pre class="console"><code>$ cd ~/GPAW/src/gofee/test_systems/C6H6</code></pre>
+                        <p>GOFEEのディレクトリ構造が変更されたので、<code>run_search.py</code>を以下のように修正する。</p>
+                        <p>Line 8:</p>
+                        <pre class="prettyprint"><code>from gofee.surrogate.gpr import GPR</code></pre>
+                        <p>Line 12:</p>
+                        <pre class="prettyprint"><code>from gofee.candidates.candidate_generation import CandidateGenerator, StartGenerator</code></pre>
+                        <p>Line 13:</p>
+                        <pre class="prettyprint"><code>from gofee.candidates.basic_mutations import RattleMutation, RattleMutation2, PermutationMutation</code></pre>
+                        <p>Line 16:</p>
+                        <pre class="prettyprint"><code>from gofee.gofee import GOFEE</code></pre>
+                        <p>Lines 41-42:</p>
+                        <pre class="prettyprint"><code>calc=GPAW(mode = &#39;lcao&#39;,</code></pre>
+                        <p>Line 57:</p>
+                        <pre class="prettyprint"><code>               candidate_generator=mutationSelector,</code></pre>
+                        <p>Line 58:</p>
+                        <pre class="prettyprint"><code>               max_steps=300,</code></pre>
+                        <p>Line 59:</p>
+                        <pre class="prettyprint"><code>               # dmax_cov=2.5,</code></pre>
+                        <p>To run GOFEE, save the following script as,
+                        e.g., <code>run.csh</code> in the current
+                        directory</p>
+                        <pre class="prettyprint"><code>#!/bin/csh
 #------- qsub option -----------
 #PBS -q SQUID
 #PBS --group=グループ名
@@ -87,37 +100,33 @@ setenv PYTHONPATH ${PYTHONPATH}:/sqfs/home/ユーザ名/GOFEE/src/gofee
 cd $PBS_O_WORKDIR
 
 mpirun -np 76 python3.8 run_search.py &gt; search.log</code></pre>
-                                    <p>and submit the job as</p>
-                                    <pre class="console"><code>$ qsub run.csh</code></pre>
-                                    <p>The progress of the calculation
-                                    can be traced as, e.g.,</p>
-                                    <pre class="console"><code>$ tail -f search.log | grep &quot;energy \| STEP&quot;</code></pre>
-                                    <p>The evolution of the structure is
-                                    registered in
-                                    <code>structures.traj</code>, which
-                                    can be visualized as</p>
-                                    <pre class="console"><code>$ ~/myenv/bin/ase gui structures.traj</code></pre>
-                                    <p>or just</p>
-                                    <pre class="console"><code>(myenv) $ ase gui structures.traj</code></pre>
-                                    <p>when the virtual environment is
-                                    activated.</p>
-                                    <h2
-                                    id="analyze-multiple-results">Analyze
-                                    multiple results</h2>
-                                    <p>Since the results should be
-                                    treated statistically, let us submit
-                                    multiple jobs in directory
-                                    <code>runs0</code></p>
-                                    <pre class="console"><code>$ pwd 
+                        <p>and submit the job as</p>
+                        <pre class="console"><code>$ qsub run.csh</code></pre>
+                        <p>The progress of the calculation can be traced
+                        as, e.g.,</p>
+                        <pre class="console"><code>$ tail -f search.log | grep &quot;energy \| STEP&quot;</code></pre>
+                        <p>The evolution of the structure is registered
+                        in <code>structures.traj</code>, which can be
+                        visualized as</p>
+                        <pre class="console"><code>$ ~/myenv/bin/ase gui structures.traj</code></pre>
+                        <p>or just</p>
+                        <pre class="console"><code>(myenv) $ ase gui structures.traj</code></pre>
+                        <p>when the virtual environment is
+                        activated.</p>
+                        <h2 id="analyze-multiple-results">Analyze
+                        multiple results</h2>
+                        <p>Since the results should be treated
+                        statistically, let us submit multiple jobs in
+                        directory <code>runs0</code></p>
+                        <pre class="console"><code>$ pwd 
 /home/&lt;your-name&gt;/GPAW/src/gofee/test_systems/C6H6
 $ mkdir runs1</code></pre>
-                                    <p>To submit, e.g., forty jobs in
-                                    <code>run0</code>,
-                                    <code>run1</code>, <code>run2</code>
-                                    … <code>fun39</code> created in
-                                    <code>runs1</code>, we modify
-                                    <code>run.csh</code> as</p>
-                                    <pre class="prettyprint"><code>#$ -S /bin/csh
+                        <p>To submit, e.g., forty jobs in
+                        <code>run0</code>, <code>run1</code>,
+                        <code>run2</code> … <code>fun39</code> created
+                        in <code>runs1</code>, we modify
+                        <code>run.csh</code> as</p>
+                        <pre class="prettyprint"><code>#$ -S /bin/csh
 #$ -cwd
 #$ -q xs2.q
 #$ -pe x16   16
@@ -146,15 +155,13 @@ cp slab.traj ${dir}
 cd ${dir}
 
 mpirun -np $NSLOTS python3.6 run_search.py &gt; search.log</code></pre>
-                                    <p>Option <code>#$ -t 1-40:1</code>
-                                    denotes the task id is incremented
-                                    from 1 to 40 by 1, and a task id is
-                                    stored in variable
-                                    <code>${SGE_TASK_ID}</code>. If the
-                                    multiple jobs are submitted
-                                    successfully, output files are
-                                    generated in each directory as</p>
-                                    <pre class="console"><code>$ ls -R runs0
+                        <p>Option <code>#$ -t 1-40:1</code> denotes the
+                        task id is incremented from 1 to 40 by 1, and a
+                        task id is stored in variable
+                        <code>${SGE_TASK_ID}</code>. If the multiple
+                        jobs are submitted successfully, output files
+                        are generated in each directory as</p>
+                        <pre class="console"><code>$ ls -R runs0
 runs0:
 run0  run1  run2 ... run39
 
@@ -169,26 +176,22 @@ eval.txt  restart  run_search.py  search.log  slab.traj  structures.traj
 .
 .
 .</code></pre>
-                                    <p>Python scripts useful for
-                                    analyzing these results are included
-                                    in sibling directory
-                                    <code>../statistics_tools</code>
-                                    as</p>
-                                    <pre class="console"><code>$ ls ../../statistics_tools
+                        <p>Python scripts useful for analyzing these
+                        results are included in sibling directory
+                        <code>../statistics_tools</code> as</p>
+                        <pre class="console"><code>$ ls ../../statistics_tools
 get_best_structures.py  plot_energy_evolution.py  survival_statistics
 $ ls ../../statistics_tools/survival_statistics
 __pycache__  collect_events.py  survival_stats.py</code></pre>
-                                    <h3 id="best-structures">Best
-                                    structures</h3>
-                                    <p><code>get_best_structures.py</code>
-                                    extracts the lowest energy from
-                                    <code>structures.traj</code> in
-                                    <code>run0</code>,
-                                    <code>run1</code>,
-                                    <code>run2</code>, … and is used by
-                                    specifying their parent directory,
-                                    i.e. <code>runs0</code>, as</p>
-                                    <pre class="console"><code>$ python3 ../../statistics_tools/get_best_structures.py runs0
+                        <h3 id="best-structures">Best structures</h3>
+                        <p><code>get_best_structures.py</code> extracts
+                        the lowest energy from
+                        <code>structures.traj</code> in
+                        <code>run0</code>, <code>run1</code>,
+                        <code>run2</code>, … and is used by specifying
+                        their parent directory, i.e. <code>runs0</code>,
+                        as</p>
+                        <pre class="console"><code>$ python3 ../../statistics_tools/get_best_structures.py runs0
 0: runs3/run0/structures.traj
 Ncalc: 610 Ebest: -68.35547274831681
 1: runs3/run1/structures.traj
@@ -199,33 +202,28 @@ Ncalc: 610 Ebest: -73.32807093380796
 .
 .
 [Errno 2] No such file or directory: &#39;runs0/run40/structures.traj&#39;</code></pre>
-                                    <p>Note that the script assumes that
-                                    <code>runs0</code> includes 100
-                                    working directories from
-                                    <code>run0</code> to
-                                    <code>run99</code> as hard-coded in
-                                    line 16 of the script:</p>
-                                    <pre class="prettyprint"><code>for i in range(100):</code></pre>
-                                    <p>This results are registered in
-                                    <code>temp_best.traj</code> in the
-                                    current directory, which will be
-                                    used to calculate the cumulative
-                                    success rate as seen below.</p>
-                                    <h3
-                                    id="cumulative-success-rate">Cumulative
-                                    success rate</h3>
-                                    <pre class="prettyprint"><code>export PYTHONPATH=/home/&lt;your-name&gt;/GPAW/src/gofee/statistics_tools/survival_statistics</code></pre>
-                                    <h3 id="energy-evolutions">Energy
-                                    evolutions</h3>
-                                    <p><code>plot_energy_evolution.py</code>
-                                    visualizes how the energy evolves in
-                                    each structure search and is used by
-                                    specfying the parent directory, the
-                                    energy range (<code>dE</code>), and
-                                    the number of the working
-                                    directories (<code>Nruns2use</code>)
-                                    as</p>
-                                    <pre class="console"><code>$ python3 ../../statistics_tools/plot_energy_evolution.py runs0 80 8
+                        <p>Note that the script assumes that
+                        <code>runs0</code> includes 100 working
+                        directories from <code>run0</code> to
+                        <code>run99</code> as hard-coded in line 16 of
+                        the script:</p>
+                        <pre class="prettyprint"><code>for i in range(100):</code></pre>
+                        <p>This results are registered in
+                        <code>temp_best.traj</code> in the current
+                        directory, which will be used to calculate the
+                        cumulative success rate as seen below.</p>
+                        <h3 id="cumulative-success-rate">Cumulative
+                        success rate</h3>
+                        <pre class="prettyprint"><code>export PYTHONPATH=/home/&lt;your-name&gt;/GPAW/src/gofee/statistics_tools/survival_statistics</code></pre>
+                        <h3 id="energy-evolutions">Energy
+                        evolutions</h3>
+                        <p><code>plot_energy_evolution.py</code>
+                        visualizes how the energy evolves in each
+                        structure search and is used by specfying the
+                        parent directory, the energy range
+                        (<code>dE</code>), and the number of the working
+                        directories (<code>Nruns2use</code>) as</p>
+                        <pre class="console"><code>$ python3 ../../statistics_tools/plot_energy_evolution.py runs0 80 8
 progress: 1/8
 Ebest=-68.35547274831681
 progress: 2/8
@@ -241,40 +239,33 @@ len(E) 610
 .
 .
 .</code></pre>
-                                    <p>where the first eight results are
-                                    shown. Note that
-                                    <code>Nruns2use</code> is set to
-                                    <code>12</code> if
-                                    <code>Nruns2use</code> is
-                                    unspecified, and in addition
-                                    <code>dE</code> is set automatically
-                                    if both the two arguments are
-                                    unspecified.</p>
-                                    <p><img
-                                    src="energyEvol_C6H6.png" /></p>
-                                    <p>The figure is also saved as
-                                    <code>energyEvol_C6H6_runs0.pdf</code>
-                                    in the current directory.</p>
-                                    <h4
-                                    id="cumulative-success-rate-1">Cumulative
-                                    success rate</h4>
-                                    <p><code>collect_events.py</code>
-                                    collects the numbers of iterations
-                                    to achieve a structure close to the
-                                    global minimum for the first time in
-                                    respective structure searches, and
-                                    <code>survival_stats.py</code>
-                                    calculates the cumulative success
-                                    rate from the data. To use these
-                                    scripts, we add the following path
-                                    to <code>$PYTHONPATH</code> in
-                                    e.g. <code>~/.bashrc</code></p>
-                                    <pre class="prettyprint"><code>export PYTHONPATH=/home/&lt;your-name&gt;/GPAW/src/gofee/statistics_tools/survival_statistics</code></pre>
-                                    <p>and</p>
-                                    <pre class="console"><code>$ source ~/.bashrc</code></pre>
-                                    <p>Then, the functions defined in
-                                    these scripts can be used as</p>
-                                    <pre class="prettyprint"><code>from collect_events import collect_events_energy
+                        <p>where the first eight results are shown. Note
+                        that <code>Nruns2use</code> is set to
+                        <code>12</code> if <code>Nruns2use</code> is
+                        unspecified, and in addition <code>dE</code> is
+                        set automatically if both the two arguments are
+                        unspecified.</p>
+                        <p><img src="energyEvol_C6H6.png" /></p>
+                        <p>The figure is also saved as
+                        <code>energyEvol_C6H6_runs0.pdf</code> in the
+                        current directory.</p>
+                        <h4 id="cumulative-success-rate-1">Cumulative
+                        success rate</h4>
+                        <p><code>collect_events.py</code> collects the
+                        numbers of iterations to achieve a structure
+                        close to the global minimum for the first time
+                        in respective structure searches, and
+                        <code>survival_stats.py</code> calculates the
+                        cumulative success rate from the data. To use
+                        these scripts, we add the following path to
+                        <code>$PYTHONPATH</code> in
+                        e.g. <code>~/.bashrc</code></p>
+                        <pre class="prettyprint"><code>export PYTHONPATH=/home/&lt;your-name&gt;/GPAW/src/gofee/statistics_tools/survival_statistics</code></pre>
+                        <p>and</p>
+                        <pre class="console"><code>$ source ~/.bashrc</code></pre>
+                        <p>Then, the functions defined in these scripts
+                        can be used as</p>
+                        <pre class="prettyprint"><code>from collect_events import collect_events_energy
 from survival_stats import survival_stats
 from ase.io.trajectory import Trajectory
 from ase.io import read, write
@@ -289,34 +280,28 @@ times, events = collect_events_energy(a_gm, &#39;runs0/&#39;, dE_max=0.2, N=40,
                                       save_dir=&#39;success_curve&#39;)
 
 survival_stats(times, events, labels=[&#39;curve 1&#39;], save_dir=&#39;success_curve&#39;)</code></pre>
-                                    <p>where <code>temp_best.traj</code>
-                                    obtained above (see the description
-                                    of
-                                    <code>get_best_structures.py</code>)
-                                    is used to identify the global
-                                    minimum. Note also that
-                                    <code>'runs0/'</code> and
-                                    <code>'N=40'</code> denote directory
-                                    <code>runs1</code> includes forty
-                                    working directories. The above
-                                    script can be copied from
-                                    <code>/home/hamamoto/GPAW/src/gofee/test_systems/C6H6/success_rate.py</code></p>
-                                    <pre class="console"><code>$ python3 success_rate.py
+                        <p>where <code>temp_best.traj</code> obtained
+                        above (see the description of
+                        <code>get_best_structures.py</code>) is used to
+                        identify the global minimum. Note also that
+                        <code>'runs0/'</code> and <code>'N=40'</code>
+                        denote directory <code>runs1</code> includes
+                        forty working directories. The above script can
+                        be copied from
+                        <code>/home/hamamoto/GPAW/src/gofee/test_systems/C6H6/success_rate.py</code></p>
+                        <pre class="console"><code>$ python3 success_rate.py
 run: 2   iter_found: 380         Energy: -73.17817593291628
 run: 4   iter_found: 194         Energy: -73.26306007011353
 run: 5   iter_found: 589         Energy: -73.230318440068
 .
 .
 .</code></pre>
-                                    <p><img
-                                    src="successRate_C6H6.png" /></p>
-                                    <h2
-                                    id="learn-more-about-gofee">Learn
-                                    more about GOFEE</h2>
-                                    <p>The information of GOFEE is
-                                    available at <a
-                                    href="http://grendel-www.cscaa.dk/mkb/">The
-                                    documentation for GOFEE</a>.</p>
+                        <p><img src="successRate_C6H6.png" /></p>
+                        <h2 id="learn-more-about-gofee">Learn more about
+                        GOFEE</h2>
+                        <p>The information of GOFEE is available at <a
+                        href="http://grendel-www.cscaa.dk/mkb/">The
+                        documentation for GOFEE</a>.</p>
                     </article>
     </body>
 </html>
