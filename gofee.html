@@ -94,7 +94,7 @@ $ source ~/py38env/bin/activate
 #------- Program execution -----------
 module load BaseCPU/2022
 export MYHOME=/sqfs2/cmc/0/home/ユーザ名
-export PYTHONPATH=${PYTHONPATH}:${MYHOME}/v60916/GPAW/src/gofee
+export PYTHONPATH=${PYTHONPATH}:${MYHOME}/GPAW/src/gofee
 cd $PBS_O_WORKDIR
 
 mpirun ${NQSV_MPIOPTS} -np 76 ${MYHOME}/py38env/bin/python run_search.py &gt; search.log</code></pre>
@@ -154,7 +154,7 @@ mpirun ${NQSV_MPIOPTS} -np 76 $MYHOME/py38env/bin/python run_search.py &gt; sear
                         directory as</p>
                         <pre class="console"><code>$ ls -R runs0
 runs0:
-run0  run1  run2 ... run39
+run0  run1  run2  run3
 
 runs0/run0:
 eval.txt  restart  run_search.py  search.log  slab.traj  structures.traj
@@ -163,10 +163,7 @@ runs0/run2:
 eval.txt  restart  run_search.py  search.log  slab.traj  structures.traj
 
 runs0/run3:
-eval.txt  restart  run_search.py  search.log  slab.traj  structures.traj
-.
-.
-.</code></pre>
+eval.txt  restart  run_search.py  search.log  slab.traj  structures.traj</code></pre>
                         <p>Python scripts useful for analyzing these
                         results are included in sibling directory
                         <code>../statistics_tools</code> as</p>
