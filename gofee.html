@@ -65,13 +65,13 @@ $ source ~/py38env/bin/activate
                         <p>GOFEEのディレクトリ構造が変更されたので、<code>run_search.py</code>を以下のように修正する。</p>
                         <p>Line 8:</p>
                         <pre class="prettyprint"><code>from gofee.surrogate.gpr import GPR</code></pre>
-                        <p>Line 12:</p>
+                        <p>Line 11:</p>
                         <pre class="prettyprint"><code>from gofee.candidates.candidate_generation import CandidateGenerator, StartGenerator</code></pre>
-                        <p>Line 13:</p>
+                        <p>Line 12:</p>
                         <pre class="prettyprint"><code>from gofee.candidates.basic_mutations import RattleMutation, RattleMutation2, PermutationMutation</code></pre>
                         <p>Line 16:</p>
                         <pre class="prettyprint"><code>from gofee.gofee import GOFEE</code></pre>
-                        <p>Lines 41-42:</p>
+                        <p>Lines 40-41:</p>
                         <pre class="prettyprint"><code>calc=GPAW(mode = &#39;lcao&#39;,</code></pre>
                         <p>Line 57:</p>
                         <pre class="prettyprint"><code>               candidate_generator=mutationSelector,</code></pre>
@@ -80,26 +80,24 @@ $ source ~/py38env/bin/activate
                         <p>Line 59:</p>
                         <pre class="prettyprint"><code>               # dmax_cov=2.5,</code></pre>
                         <p>To run GOFEE, save the following script as,
-                        e.g., <code>run.csh</code> in the current
+                        e.g., <code>run.sh</code> in the current
                         directory</p>
-                        <pre class="prettyprint"><code>#!/bin/csh
+                        <pre class="prettyprint"><code>#!/bin/sh
 #------- qsub option -----------
 #PBS -q SQUID
 #PBS --group=グループ名
 #PBS -m be
 #PBS -M メールアドレス
 #PBS -l cpunum_job=76
-#PBS -l elapstim_req=23:30:00
+#PBS -l elapstim_req=1:00:00
 #PBS -N C6H6
 #------- Program execution -----------
 module load BaseCPU/2022
-setenv PATH /sqfs/home/ユーザ名/py38env/bin:${PATH}
-setenv PYTHONPATH /sqfs/home/ユーザ名/GPAW/src/gpaw-20.10.0
-setenv PYTHONPATH ${PYTHONPATH}:/sqfs/home/ユーザ名/GOFEE/src/gofee
-
+export MYHOME=/sqfs2/cmc/0/home/ユーザ名
+export PYTHONPATH=${PYTHONPATH}:${MYHOME}/v60916/GPAW/src/gofee
 cd $PBS_O_WORKDIR
 
-mpirun -np 76 python3.8 run_search.py &gt; search.log</code></pre>
+mpirun ${NQSV_MPIOPTS} -np 76 ${MYHOME}/py38env/bin/python run_search.py &gt; search.log</code></pre>
                         <p>and submit the job as</p>
                         <pre class="console"><code>$ qsub run.csh</code></pre>
                         <p>The progress of the calculation can be traced
@@ -117,50 +115,43 @@ mpirun -np 76 python3.8 run_search.py &gt; search.log</code></pre>
                         multiple results</h2>
                         <p>Since the results should be treated
                         statistically, let us submit multiple jobs in
-                        directory <code>runs0</code></p>
-                        <pre class="console"><code>$ pwd 
-/home/&lt;your-name&gt;/GPAW/src/gofee/test_systems/C6H6
-$ mkdir runs1</code></pre>
-                        <p>To submit, e.g., forty jobs in
-                        <code>run0</code>, <code>run1</code>,
-                        <code>run2</code> … <code>fun39</code> created
-                        in <code>runs1</code>, we modify
-                        <code>run.csh</code> as</p>
-                        <pre class="prettyprint"><code>#$ -S /bin/csh
-#$ -cwd
-#$ -q xs2.q
-#$ -pe x16   16
-#$ -j y
-#$ -N C6H6
-#$ -t 1-40:1
+                        directory <code>runs0</code>. To submit, e.g.,
+                        three jobs in <code>run0</code>,
+                        <code>run1</code>, and <code>run2</code> created
+                        in <code>runs0</code>, modify
+                        <code>run.sh</code> as</p>
+                        <pre class="prettyprint"><code>#!/bin/bash
+#------- qsub option -----------
+#PBS -q SQUID
+#PBS --group=グループ名
+#PBS -m be
+#PBS -M hamamoto@c.oka-pu.ac.jp
+#PBS -l cpunum_job=76
+#PBS -l elapstim_req=1:00:00
+#PBS -N C6H6
+#PBS -T intmpi
+#PBS -v OMP_NUM_THREADS=1
+#------- Program execution -----------
+module load BaseCPU/2022
+export MYHOME=/sqfs2/cmc/0/home/ユーザ名
+export PYTHONPATH=${PYTHONPATH}:$MYHOME/GPAW/src/gofee
 
+cd $PBS_O_WORKDIR
 
-setenv PATH /home/hamamoto/myenv/bin:${PATH}
-setenv PYTHONPATH /home/hamamoto/GPAW/src/gpaw-20.1.0
-setenv PYTHONPATH ${PYTHONPATH}:/home/hamamoto/GPAW/src/gofee
-
-source /opt/settings/2017.4/intel-compiler.csh
-source /opt/settings/2017.4/intel-mpi.csh
-
-setenv OMP_NUM_THREADS         1
-setenv I_MPI_ADJUST_ALLGATHERV 2
-setenv I_MPI_PIN               1
-
-set id = ${SGE_TASK_ID}
-@ id = ${id} - 1
-set dir = runs0/run${id}
-mkdir $dir
+dir=runs0/run${TASK_ID}
+mkdir -p $dir
 cp run_search.py ${dir}
 cp slab.traj ${dir}
 cd ${dir}
 
-mpirun -np $NSLOTS python3.6 run_search.py &gt; search.log</code></pre>
-                        <p>Option <code>#$ -t 1-40:1</code> denotes the
-                        task id is incremented from 1 to 40 by 1, and a
-                        task id is stored in variable
-                        <code>${SGE_TASK_ID}</code>. If the multiple
-                        jobs are submitted successfully, output files
-                        are generated in each directory as</p>
+mpirun ${NQSV_MPIOPTS} -np 76 $MYHOME/py38env/bin/python run_search.py &gt; search.log</code></pre>
+                        <p>and run the following command</p>
+                        <pre class="console"><code>$ for ((i=0; i&lt;3; ++i)); do qsub -v TASK_ID=$i run.sh; done</code></pre>
+                        <p>where the environment variable TASK_ID is
+                        used in run.sh to distinguish the different
+                        jobs. If the multiple jobs are submitted
+                        successfully, output files are generated in each
+                        directory as</p>
                         <pre class="console"><code>$ ls -R runs0
 runs0:
 run0  run1  run2 ... run39
