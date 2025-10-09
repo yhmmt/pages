@@ -23,8 +23,9 @@
         </style>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@3.0.1/github-markdown.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-                <link rel="stylesheet" href="style.css" />
         <title>MobaXterm</title>
+        <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+                <link rel="stylesheet" href="style.css" />
                             </head>
     <body>
         <article class="markdown-body">
@@ -33,7 +34,7 @@
                                                             </header>
                                     <p>WindowsでX-Windowが使える端末エミュレータMobaXtermの使い方を説明する。</p>
                                     <h2
-                                    id="リモートホストにログイン">リモートホストにログイン</h2>
+                                    id="sshでリモートホストにログイン">SSHでリモートホストにログイン</h2>
                                     <ol type="1">
                                     <li><p>左上のNew
                                     sessionボタンを押す</p>
@@ -51,6 +52,26 @@
                                     sessionsから選択してログイン</p>
                                     <p><img
                                     src="mobaxterm_4.png" /></p></li>
+                                    </ol>
+                                    <h2
+                                    id="sftpでリモートホストにファイル転送">SFTPでリモートホストにファイル転送</h2>
+                                    <ol type="1">
+                                    <li><p>左上のNew
+                                    sessionボタンを押す</p>
+                                    <p><img
+                                    src="mobaxterm_1.png" /></p></li>
+                                    <li><p>真ん中上部のSFTPボタンを押す</p>
+                                    <p><img
+                                    src="mobaxterm_5.png" /></p></li>
+                                    <li><p>Remote
+                                    hostにホスト名を入力し、Specify
+                                    usernameにチェックを入れてユーザ名を入力し、下のOKボタンを押す</p>
+                                    <p><img
+                                    src="mobaxterm_6.png" /></p></li>
+                                    <li><p>左ペインと右ペインの間でファイルをDrag
+                                    &amp; Dropして送受信</p>
+                                    <p><img
+                                    src="mobaxterm_7.png" /></p></li>
                                     </ol>
                     </article>
     </body>
