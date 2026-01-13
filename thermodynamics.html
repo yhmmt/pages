@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="generator" content="pandoc" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+                                        <style>
+         code{white-space: pre-wrap;}
+         span.smallcaps{font-variant: small-caps;}
+         div.columns{display: flex; gap: min(4vw, 1.5em);}
+         div.column{flex: auto; overflow-x: auto;}
+         div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+         /* The extra [class] is a hack that increases specificity enough to
+            override a similar rule in reveal.js */
+         ul.task-list[class]{list-style: none;}
+         ul.task-list li input[type="checkbox"] {
+           font-size: inherit;
+           width: 0.8em;
+           margin: 0 0.8em 0.2em -1.6em;
+           vertical-align: middle;
+         }
+        </style>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@3.0.1/github-markdown.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <title>第一原理熱力学</title>
+        <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+                <link rel="stylesheet" href="style.css" />
+                        <script
+                        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
+                        type="text/javascript"></script>
+                    </head>
+    <body>
+        <article class="markdown-body">
+                                    <header id="title-block-header">
+                <h1 class="title">第一原理熱力学</h1>
+                                                            </header>
+                                    <p>第一原理計算で熱力学の問題を解く手法を説明する</p>
+                                    <h2
+                                    id="開いた系の熱力学">開いた系の熱力学</h2>
+                                    <h3
+                                    id="熱力学の第一法則">熱力学の第一法則</h3>
+                                    <p>系の内部エネルギーの変化は外界からなされた仕事、外界から流入した熱量、および外界からの物質の流入に伴うエネルギー変化に等しい（エネルギー保存則）:</p>
+                                    <p><span class="math display">\[
+                                    {\rm d}U=\delta W+\delta
+                                    Q+\sum_i\mu_i{\rm d}N_i
+                                    \]</span></p>
+                                    <p>化学ポテンシャル<span
+                                    class="math inline">\(\mu_i\)</span>は物質<span
+                                    class="math inline">\(i\)</span>を微小に増やしたときのエネルギー変化率。</p>
+                                    <h3
+                                    id="熱力学の第二法則">熱力学の第二法則</h3>
+                                    <p>熱源も含めた全系のエントロピーは増大する（エントロピー増大の法則）:
+                                    <span class="math display">\[
+                                    {\rm d}S-\frac{\delta Q}{T}\ge0
+                                    \]</span>
+                                    第二項は準静的過程に伴う熱源のエントロピー変化。</p>
+                                    <h3
+                                    id="等温等積等化学ポテンシャル過程">等温・等積・等化学ポテンシャル過程</h3>
+                                    <p>第一法則を変形すると <span
+                                    class="math display">\[
+                                    \delta Q={\rm d}U-\delta
+                                    W-\sum_i\mu_i{\rm d}N_i.
+                                    \]</span> 第二法則を変形すると <span
+                                    class="math display">\[
+                                    \delta Q\le T{\rm d}S.
+                                    \]</span> これらから<span
+                                    class="math inline">\(\delta
+                                    Q\)</span>を消去すると <span
+                                    class="math display">\[
+                                    {\rm d}U-T{\rm d}S-\sum_i\mu_i{\rm
+                                    d}N_i\le \delta W.
+                                    \]</span> 温度一定（<span
+                                    class="math inline">\(T={\rm
+                                    const.}\)</span>）、化学ポテンシャル一定（<span
+                                    class="math inline">\(\{\mu_i\}={\rm
+                                    const.}\)</span>）のとき
+                                    グランドポテンシャル <span
+                                    class="math display">\[
+                                    \Omega=U-TS-\sum_i\mu_iN_i
+                                    \]</span> を導入すると <span
+                                    class="math display">\[
+                                    {\rm d}\Omega\le\delta W.
+                                    \]</span>
+                                    すなわちグランドポテンシャル変化は外界からなされた仕事を超えない。</p>
+                                    <p>さらに外界からなされた仕事がゼロ（<span
+                                    class="math inline">\(\delta
+                                    W=0\)</span>）、
+                                    とくに仕事が体積変化に伴ってなされる場合は体積一定（<span
+                                    class="math inline">\({\rm
+                                    d}V=0\)</span>）のとき <span
+                                    class="math display">\[
+                                    {\rm d}\Omega\le0.
+                                    \]</span>
+                                    すなわち温度、体積、および化学ポテンシャルが一定の過程では、グランドポテンシャルが減少するように系が変化する。</p>
+                                    <h2
+                                    id="開いた系の第一原理計算">開いた系の第一原理計算</h2>
+                                    <h3
+                                    id="グランドポテンシャル">グランドポテンシャル</h3>
+                                    <p>簡単のためエントロピー変化の寄与は相対的に小さいと仮定して</p>
+                                    <p><span class="math display">\[
+                                    \Omega\simeq U-\sum_i\mu_iN_i
+                                    \]</span></p>
+                    </article>
+    </body>
+</html>
