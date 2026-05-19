@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>C Hello World</title>
+</head>
+
+<body>
+
+<h1>C Compiler on Browser</h1>
+
+<textarea id="code" rows="15" cols="80">
+#include <stdio.h>
+
+int main() {
+    printf("Hello, World!\n");
+    return 0;
+}
+</textarea>
+
+<br><br>
+
+<button onclick="runCode()">Compile & Run</button>
+
+<h2>Output</h2>
+
+<pre id="output"></pre>
+
+<script type="module">
+
+import { WebAssemblyCompiler } from "https://cdn.jsdelivr.net/npm/@wasmer/sdk/+esm";
+
+const output = document.getElementById("output");
+
+async function runCode() {
+
+    output.textContent = "Compiling...\n";
+
+    const code = document.getElementById("code").value;
+
+    try {
+
+        const compiler = new WebAssemblyCompiler({
+            language: "c"
+        });
+
+        const executable = await compiler.compile({
+            source: code
+        });
+
+        output.textContent += "Running...\n\n";
+
+        const result = await executable.run();
+
+        output.textContent += result.stdout;
+
+        if (result.stderr) {
+            output.textContent += "\n[stderr]\n";
+            output.textContent += result.stderr;
+        }
+
+    } catch (err) {
+
+        output.textContent += "\nError:\n";
+        output.textContent += err;
+
+    }
+}
+
+window.runCode = runCode;
+
+</script>
+
+</body>
+</html>
