@@ -1,19 +1,53 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="utf-8">
-<title>Paiza Embed</title>
-</head>
 <body>
 
-<h3>Paiza Code Embed</h3>
+<h2>Judge0 REPL</h2>
 
-<iframe src="https://paiza.io/projects/e/Lt0gNGzRld5Xe52Hq_3Yyg?theme=chrome"
-        width="100%"
-        height="500"
-        scrolling="no"
-        seamless="seamless">
-</iframe>
+<select id="lang">
+  <option value="71">Python</option>
+  <option value="63">JavaScript</option>
+</select>
+
+<br><br>
+
+<textarea id="code" rows="10" cols="50">
+print("hello")
+</textarea>
+
+<br><br>
+
+<button onclick="run()">Run</button>
+
+<pre id="out"></pre>
+
+<script>
+async function run() {
+  const code = document.getElementById("code").value;
+  const lang = document.getElementById("lang").value;
+  const out = document.getElementById("out");
+
+  out.textContent = "Running...";
+
+  const res = await fetch("https://ce.judge0.com/submissions?base64_encoded=false&wait=true", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      source_code: code,
+      language_id: parseInt(lang)
+    })
+  });
+
+  const data = await res.json();
+
+  out.textContent =
+    data.stdout ||
+    data.stderr ||
+    JSON.stringify(data, null, 2);
+}
+</script>
 
 </body>
 </html>
