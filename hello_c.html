@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>C REPL</h2>
+
+<textarea id="code" rows="15" cols="60">
+#include <stdio.h>
+
+int main() {
+    printf("Hello C\n");
+    return 0;
+}
+</textarea>
+
+<br><br>
+
+<button onclick="run()">Run</button>
+
+<pre id="out"></pre>
+
+<script>
+async function run() {
+
+  const code = document.getElementById("code").value;
+  const out = document.getElementById("out");
+
+  out.textContent = "Running...";
+
+  const res = await fetch(
+    "https://ce.judge0.com/submissions?base64_encoded=false&wait=true",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        source_code: code,
+        language_id: 50
+      })
+    }
+  );
+
+  const data = await res.json();
+
+  out.textContent =
+    data.stdout ||
+    data.compile_output ||
+    data.stderr ||
+    "no output";
+}
+</script>
+
+</body>
+</html>
