@@ -62,17 +62,17 @@
                                     class="math display">\[
                                     \Delta V(\boldsymbol{r})\simeq
                                     V_\boldsymbol{Q}{\rm
-                                    e}^{-i\boldsymbol{Q}\cdot\boldsymbol{r}}
-                                    +V^\ast_\boldsymbol{Q}{\rm
                                     e}^{i\boldsymbol{Q}\cdot\boldsymbol{r}}
+                                    +V^\ast_\boldsymbol{Q}{\rm
+                                    e}^{-i\boldsymbol{Q}\cdot\boldsymbol{r}}
                                     \]</span></p>
                                     <p>行列要素 <span
                                     class="math display">\[
                                     \langle\boldsymbol{k}|\Delta
                                     V(\boldsymbol{r})|\boldsymbol{k}&#39;\rangle
                                     =
-                                    V_\boldsymbol{Q}\delta_{\boldsymbol{k},\boldsymbol{k}&#39;-\boldsymbol{Q}}
-                                    +V^\ast_\boldsymbol{Q}\delta_{\boldsymbol{k},\boldsymbol{k}&#39;+\boldsymbol{Q}}
+                                    V_\boldsymbol{Q}\delta_{\boldsymbol{k},\boldsymbol{k}&#39;+\boldsymbol{Q}}
+                                    +V^\ast_\boldsymbol{Q}\delta_{\boldsymbol{k},\boldsymbol{k}&#39;-\boldsymbol{Q}}
                                     \]</span></p>
                                     <p><span
                                     class="math inline">\(|\boldsymbol{k}\rangle\)</span>と<span
@@ -81,8 +81,8 @@
                                     H=
                                     \begin{pmatrix}
                                     \varepsilon_\boldsymbol{k} &amp;
-                                    V_\boldsymbol{Q}\\
-                                    V^\ast_{\boldsymbol{Q}} &amp;
+                                    V^\ast_\boldsymbol{Q}\\
+                                    V_{\boldsymbol{Q}} &amp;
                                     \varepsilon_{\boldsymbol{k}+\boldsymbol{Q}}
                                     \end{pmatrix}
                                     \]</span></p>
@@ -92,8 +92,8 @@
                                     &amp;=
                                     \begin{pmatrix}
                                     \omega-\varepsilon_\boldsymbol{k}+i\eta
-                                    &amp; -V_\boldsymbol{Q}\\
-                                    -V^\ast_{\boldsymbol{Q}} &amp;
+                                    &amp; -V^\ast_\boldsymbol{Q}\\
+                                    -V_{\boldsymbol{Q}} &amp;
                                     \omega+\varepsilon_{\boldsymbol{k}+\boldsymbol{Q}}+i\eta
                                     \end{pmatrix}
                                     \end{align*}\]</span></p>
@@ -103,13 +103,13 @@
                                     &amp;=\frac{1}{D(\omega)}
                                     \begin{pmatrix}
                                     \omega-\varepsilon_{\boldsymbol{k}+\boldsymbol{Q}}+i\eta
-                                    &amp; V_\boldsymbol{Q}\\
-                                    V^\ast_{\boldsymbol{Q}} &amp;
+                                    &amp; V^\ast_\boldsymbol{Q}\\
+                                    V_{\boldsymbol{Q}} &amp;
                                     \omega+\varepsilon_{\boldsymbol{k}}+i\eta
                                     \end{pmatrix}\\
                                     D(\omega)&amp;=(\omega-\varepsilon_\boldsymbol{k}+i\eta)(\omega-\varepsilon_{\boldsymbol{k}+\boldsymbol{Q}}+i\eta)
                                     -|V_\boldsymbol{Q}|^2\\
-                                    &amp;=(\omega-E_+)(\omega-E_-)
+                                    &amp;=(\omega-E^+_\boldsymbol{k})(\omega-E^-_\boldsymbol{k})
                                     \end{align*}\]</span></p>
                                     <p>固有エネルギー <span
                                     class="math display">\[\begin{align*}
@@ -118,53 +118,53 @@
                                     &amp;=\omega^2-(\varepsilon_\boldsymbol{k}+\varepsilon_{\boldsymbol{k}+\boldsymbol{Q}})\omega
                                     +\varepsilon_\boldsymbol{k}\varepsilon_{\boldsymbol{k}+\boldsymbol{Q}}-|V_\boldsymbol{Q}|^2,\\
                                     \therefore
-                                    E_\pm&amp;=\frac{\varepsilon_\boldsymbol{k}+\varepsilon_{\boldsymbol{k}+\boldsymbol{Q}}}{2}
+                                    E^\pm_\boldsymbol{k}&amp;=\frac{\varepsilon_\boldsymbol{k}+\varepsilon_{\boldsymbol{k}+\boldsymbol{Q}}}{2}
                                     \pm\sqrt{\left(\frac{\varepsilon_\boldsymbol{k}-\varepsilon_{\boldsymbol{k}+\boldsymbol{Q}}}{2}\right)^2+|V_\boldsymbol{Q}|^2}\\
                                     &amp;=\frac{\varepsilon_\boldsymbol{k}+\varepsilon_{\boldsymbol{k}+\boldsymbol{Q}}}{2}
-                                    \pm\sqrt{\left(\frac{\Delta}{2}\right)^2+|V_\boldsymbol{Q}|^2},\\
-                                    \Delta&amp;\equiv\varepsilon_\boldsymbol{k}-\varepsilon_{\boldsymbol{k}+\boldsymbol{Q}},\\
-                                    E_+-E_-&amp;=\sqrt{\Delta^2+4|V_\boldsymbol{Q}|^2}
+                                    \pm\sqrt{\left(\frac{\Delta_\boldsymbol{k}}{2}\right)^2+|V_\boldsymbol{Q}|^2},\\
+                                    \Delta_\boldsymbol{k}&amp;\equiv\varepsilon_\boldsymbol{k}-\varepsilon_{\boldsymbol{k}+\boldsymbol{Q}},\\
+                                    E^+_\boldsymbol{k}-E^-_\boldsymbol{k}&amp;=\sqrt{\Delta_\boldsymbol{k}^2+4|V_\boldsymbol{Q}|^2}
                                     \end{align*}\]</span></p>
                                     <p>Green行列の<span
                                     class="math inline">\(\boldsymbol{kk}\)</span>要素
                                     <span
                                     class="math display">\[\begin{align*}
-                                    G_{\boldsymbol{kk}}(\omega)&amp;=\frac{\omega-\varepsilon_{\boldsymbol{k}+\boldsymbol{Q}}+i\eta}{(\omega-E_+)(\omega-E_-)}\\
-                                    &amp;\equiv\frac{Z_+(\omega)}{\omega-E_+}+\frac{Z_-(\omega)}{\omega-E_-}
+                                    G_{\boldsymbol{kk}}(\omega)&amp;=\frac{\omega-\varepsilon_{\boldsymbol{k}+\boldsymbol{Q}}+i\eta}{(\omega-E^+_\boldsymbol{k})(\omega-E^-_\boldsymbol{k})}\\
+                                    &amp;\equiv\frac{Z^+_\boldsymbol{k}}{\omega-E^+_\boldsymbol{k}}+\frac{Z^-_\boldsymbol{k}}{\omega-E^-_\boldsymbol{k}}
                                     \end{align*}\]</span></p>
                                     <p>スペクトル重み <span
                                     class="math display">\[\begin{align*}
-                                    Z_+(\omega)&amp;=\lim_{\omega\rightarrow
-                                    E_+}(\omega-E_+)G_{\boldsymbol{kk}}(\omega)\\
-                                    &amp;=\frac{E_+-\varepsilon_{\boldsymbol{k}+\boldsymbol{Q}}}{E_+-E_-}\\
-                                    &amp;=\frac{1}{\sqrt{\Delta^2+4|V_\boldsymbol{Q}|^2}}\left(
-                                    \frac{\Delta}{2}+\sqrt{\left(\frac{\Delta}{2}\right)^2+|V_\boldsymbol{Q}|^2}
+                                    Z^+_\boldsymbol{k}&amp;=\lim_{\omega\rightarrow
+                                    E^+_\boldsymbol{k}}(\omega-E^+_\boldsymbol{k})G_{\boldsymbol{kk}}(\omega)\\
+                                    &amp;=\frac{E^+_\boldsymbol{k}-\varepsilon_{\boldsymbol{k}+\boldsymbol{Q}}}{E^+_\boldsymbol{k}-E^-_\boldsymbol{k}}\\
+                                    &amp;=\frac{1}{\sqrt{\Delta_\boldsymbol{k}^2+4|V_\boldsymbol{Q}|^2}}\left(
+                                    \frac{\Delta_\boldsymbol{k}}{2}+\sqrt{\left(\frac{\Delta_\boldsymbol{k}}{2}\right)^2+|V_\boldsymbol{Q}|^2}
                                     \right)\\
-                                    &amp;=\frac{1}{2}\left(1+\frac{\Delta}{\sqrt{\Delta^2+4|V_\boldsymbol{Q}|^2}}\right),
+                                    &amp;=\frac{1}{2}\left(1+\frac{\Delta_\boldsymbol{k}}{\sqrt{\Delta_\boldsymbol{k}^2+4|V_\boldsymbol{Q}|^2}}\right),
                                     \\
-                                    Z_-(\omega)&amp;=\lim_{\omega\rightarrow
-                                    E_-}(\omega-E_-)G_{\boldsymbol{kk}}(\omega)\\
-                                    &amp;=\frac{E_--\varepsilon_{\boldsymbol{k}+\boldsymbol{Q}}}{E_--E_+}\\
-                                    &amp;=\frac{1}{\sqrt{\Delta^2+4|V_\boldsymbol{Q}|^2}}\left(
-                                    -\frac{\Delta}{2}+\sqrt{\left(\frac{\Delta}{2}\right)^2+|V_\boldsymbol{Q}|^2}
+                                    Z^-_\boldsymbol{k}&amp;=\lim_{\omega\rightarrow
+                                    E^-_\boldsymbol{k}}(\omega-E^-_\boldsymbol{k})G_{\boldsymbol{kk}}(\omega)\\
+                                    &amp;=\frac{E^-_\boldsymbol{k}-\varepsilon_{\boldsymbol{k}+\boldsymbol{Q}}}{E^-_\boldsymbol{k}-E^+_\boldsymbol{k}}\\
+                                    &amp;=\frac{1}{\sqrt{\Delta_\boldsymbol{k}^2+4|V_\boldsymbol{Q}|^2}}\left(
+                                    -\frac{\Delta_\boldsymbol{k}}{2}+\sqrt{\left(\frac{\Delta_\boldsymbol{k}}{2}\right)^2+|V_\boldsymbol{Q}|^2}
                                     \right)\\
-                                    &amp;=\frac{1}{2}\left(1-\frac{\Delta}{\sqrt{\Delta^2+4|V_\boldsymbol{Q}|^2}}\right),\\
-                                    \therefore Z_\pm(\boldsymbol{k})
+                                    &amp;=\frac{1}{2}\left(1-\frac{\Delta_\boldsymbol{k}}{\sqrt{\Delta_\boldsymbol{k}^2+4|V_\boldsymbol{Q}|^2}}\right),\\
+                                    \therefore Z^\pm_\boldsymbol{k}
                                     &amp;=\lim_{\omega\rightarrow
-                                    E_\pm}(\omega-E_\pm)G_{\boldsymbol{kk}}(\omega)\\
-                                    &amp;=\frac{1}{2}\left(1\pm\frac{\Delta}{\sqrt{\Delta^2+4|V_\boldsymbol{Q}|^2}}\right)
+                                    E_\pm}(\omega-E^\pm_\boldsymbol{k})G_{\boldsymbol{kk}}(\omega)\\
+                                    &amp;=\frac{1}{2}\left(1\pm\frac{\Delta_\boldsymbol{k}}{\sqrt{\Delta_\boldsymbol{k}^2+4|V_\boldsymbol{Q}|^2}}\right)
                                     \end{align*}\]</span></p>
                                     <p>スペクトル関数 <span
                                     class="math display">\[\begin{align*}
                                     A(\boldsymbol{k},\omega)&amp;=-\frac{1}{\pi}{\rm
                                     Im}G_{\boldsymbol{kk}}(\omega)\\
                                     &amp;=-\frac{1}{\pi}{\rm Im}\left(
-                                    \frac{Z_+(\boldsymbol{k})}{\omega-E_++i\eta}+\frac{Z_-(\boldsymbol{k})}{\omega-E_-+i\eta}
+                                    \frac{Z^+_\boldsymbol{k}}{\omega-E^+_\boldsymbol{k}+i\eta}+\frac{Z^-_\boldsymbol{k}}{\omega-E^-_\boldsymbol{k}+i\eta}
                                     \right)\\
-                                    &amp;=Z_+(\boldsymbol{k})\delta(\omega-E_+)+Z_-(\boldsymbol{k})\delta(\omega-E_-)
+                                    &amp;=Z^+_\boldsymbol{k}\delta(\omega-E^+_\boldsymbol{k})+Z^-_\boldsymbol{k}\delta(\omega-E^-_\boldsymbol{k})
                                     \end{align*}\]</span></p>
                                     <p>バンドの交点<span
-                                    class="math inline">\(|\Delta/V_\boldsymbol{Q}|\ll
+                                    class="math inline">\(|\Delta_\boldsymbol{k}/V_\boldsymbol{Q}|\ll
                                     1\)</span></p>
                                     <h3 id="簡単な例">簡単な例</h3>
                                     <p>周期<span
@@ -177,13 +177,13 @@
                                     class="math display">\[\begin{align*}
                                     \varepsilon_{k+Q}&amp;=-2t\cos\left(ka+\pi\right)\\
                                     &amp;=+2t\cos ka,\\
-                                    \Delta&amp;=\varepsilon_{k}-\varepsilon_{k+Q}\\
+                                    \Delta_{k}&amp;=\varepsilon_{k}-\varepsilon_{k+Q}\\
                                     &amp;=-4t\cos ka,\\
-                                    E_\pm&amp;=\pm\sqrt{(2t\cos
+                                    E^\pm_k&amp;=\pm\sqrt{(2t\cos
                                     ka)^2+|V_Q|^2}\\
                                     &amp;=\pm\sqrt{\varepsilon_k^2+|V_Q|^2},
                                     \\
-                                    Z_\pm(k)
+                                    Z^\pm_k
                                     &amp;=\frac{1}{2}\left(1\pm\frac{-2t\cos
                                     ka}{\sqrt{(-2t\cos
                                     ka)^2+|V_Q|^2}}\right)\\
