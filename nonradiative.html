@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="generator" content="pandoc" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+                                        <style>
+         code{white-space: pre-wrap;}
+         span.smallcaps{font-variant: small-caps;}
+         div.columns{display: flex; gap: min(4vw, 1.5em);}
+         div.column{flex: auto; overflow-x: auto;}
+         div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+         /* The extra [class] is a hack that increases specificity enough to
+            override a similar rule in reveal.js */
+         ul.task-list[class]{list-style: none;}
+         ul.task-list li input[type="checkbox"] {
+           font-size: inherit;
+           width: 0.8em;
+           margin: 0 0.8em 0.2em -1.6em;
+           vertical-align: middle;
+         }
+        </style>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@3.0.1/github-markdown.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <title>非放射捕獲</title>
+        <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+                <link rel="stylesheet" href="style.css" />
+                        <script
+                        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
+                        type="text/javascript"></script>
+                    </head>
+    <body>
+        <article class="markdown-body">
+                                    <header id="title-block-header">
+                <h1 class="title">非放射捕獲</h1>
+                                                            </header>
+                                    <h2
+                                    id="ハミルトン演算子">ハミルトン演算子</h2>
+                                    <p>原子座標 <span
+                                    class="math display">\[
+                                    \boldsymbol{R}=(x_1,y_1,z_1,\cdots,x_N,y_N,z_N)
+                                    \]</span>
+                                    に依存するハミルトン演算子<span
+                                    class="math inline">\(H(\boldsymbol{R})\)</span>を
+                                    平衡位置<span
+                                    class="math inline">\(\boldsymbol{R}=\boldsymbol{R}_0\)</span>の周りで展開
+                                    <span
+                                    class="math display">\[\begin{align*}
+                                    H(\boldsymbol{R})&amp;\simeq
+                                    H(\boldsymbol{R}_0)+(\boldsymbol{R}-\boldsymbol{R}_0)\cdot\nabla_{\boldsymbol{R}}H(\boldsymbol{R}_0)\\
+                                    &amp;\equiv H_0+H&#39;.
+                                    \end{align*}\]</span>
+                                    無摂動ハミルトニアン<span
+                                    class="math inline">\(H_0\equiv
+                                    H(\boldsymbol{R}_0)\)</span>に対する電子系の固有関数を<span
+                                    class="math inline">\(\Psi_n\)</span>とすると
+                                    <span class="math display">\[
+                                    H_0|\Psi_n\rangle=E_n|\Psi_n\rangle
+                                    \]</span></p>
+                                    <h2 id="摂動論">摂動論</h2>
+                                    <p>原子振動の振動数が<span
+                                    class="math inline">\(\Omega\)</span>のときの分配関数
+                                    <span
+                                    class="math display">\[\begin{align*}
+                                    Z&amp;=\sum_{n=0}^\infty{\rm
+                                    e}^{-\beta E_n}
+                                    =\frac{{\rm
+                                    e}^{-\beta\hbar\Omega/2}}{1-{\rm
+                                    e}^{-\beta\hbar\Omega}}.
+                                    \end{align*}\]</span></p>
+                                    <p>振動数<span
+                                    class="math inline">\(\Omega\)</span>の状態の占有数<span
+                                    class="math inline">\(n\)</span>ときの重み
+                                    <span class="math display">\[
+                                    w_n=\frac{{\rm e}^{-\beta
+                                    E_n}}{Z}={\rm e}^{-\beta \hbar\Omega
+                                    n}(1-{\rm e}^{-\beta\hbar\Omega}).
+                                    \]</span></p>
+                                    <p>振動の始状態(占有数<span
+                                    class="math inline">\(n\)</span>)から終状態(占有数<span
+                                    class="math inline">\(m\)</span>)への遷移率
+                                    <span class="math display">\[
+                                    r=\frac{2\pi}{\hbar}\sum_{if}w_n|H&#39;_{nm}|^2\delta(E_n-E_m).
+                                    \]</span></p>
+                                    <p>行列要素 <span
+                                    class="math display">\[\begin{align*}
+                                    H&#39;_{nm}&amp;=\langle
+                                    \chi_n|\langle\Psi_n|H&#39;|\Psi_m\rangle|\chi_m\rangle\\
+                                    &amp;=\langle\Psi_n|\nabla_{\boldsymbol{R}}H(\boldsymbol{R}_0)|\Psi_m\rangle\langle\chi_n|(\boldsymbol{R}-\boldsymbol{R}_0)|\chi_m\rangle
+                                    \end{align*}\]</span></p>
+                                    <h2
+                                    id="hellmann-feynmanの定理">Hellmann-Feynmanの定理</h2>
+                                    <p><span
+                                    class="math inline">\(H(\boldsymbol{R})\)</span>の固有エネルギーを<span
+                                    class="math inline">\(E_n(\boldsymbol{R})\)</span>に対応する固有関数を<span
+                                    class="math inline">\(\Psi_n(\boldsymbol{R})\)</span>とすると
+                                    <span class="math display">\[
+                                    H(\boldsymbol{R})|\Psi_n(\boldsymbol{R})\rangle=E_n(\boldsymbol{R})|\Psi_n(\boldsymbol{R})\rangle.
+                                    \]</span> 規格化条件の両辺を<span
+                                    class="math inline">\(\boldsymbol{R}\)</span>で微分
+                                    <span
+                                    class="math display">\[\begin{gather*}
+                                    \langle\Psi_n(\boldsymbol{R})|\Psi_n(\boldsymbol{R})\rangle=1,\\
+                                    [\nabla_\boldsymbol{R}\langle\Psi_n(\boldsymbol{R})]|\Psi_n(\boldsymbol{R})\rangle
+                                    +\langle\Psi_n(\boldsymbol{R})[\nabla_\boldsymbol{R}|\Psi_n(\boldsymbol{R})\rangle]=0,\\
+                                    \therefore[\nabla_\boldsymbol{R}\langle\Psi_n(\boldsymbol{R})]|\Psi_n(\boldsymbol{R})\rangle
+                                    =-\langle\Psi_n(\boldsymbol{R})[\nabla_\boldsymbol{R}|\Psi_n(\boldsymbol{R})\rangle]
+                                    \end{gather*}\]</span></p>
+                                    <p>固有値方程式の両辺に左から<span
+                                    class="math inline">\(\langle\Psi_m(\boldsymbol{R}|\)</span>を掛けて<span
+                                    class="math inline">\(\boldsymbol{R}\)</span>微分
+                                    <span
+                                    class="math display">\[\begin{align*}
+                                    \langle\Psi_m(\boldsymbol{R})|H(\boldsymbol{R})|\Psi_n(\boldsymbol{R})\rangle&amp;=E_n(\boldsymbol{R})\langle\Psi_m(\boldsymbol{R})|\Psi_n(\boldsymbol{R})\rangle=E_n(\boldsymbol{R})\delta_{mn},\\
+                                    [\nabla_\boldsymbol{R}\langle\Psi_m(\boldsymbol{R})|]H(\boldsymbol{R})|\Psi_n(\boldsymbol{R})\rangle
+                                    &amp;+\langle\Psi_m(\boldsymbol{R})|[\nabla_\boldsymbol{R}H(\boldsymbol{R})]|\Psi_n(\boldsymbol{R})\rangle\\
+                                    &amp;+\langle\Psi_m(\boldsymbol{R})|H(\boldsymbol{R})[\nabla_\boldsymbol{R}|\Psi_n(\boldsymbol{R})\rangle]
+                                    =[\nabla_\boldsymbol{R}E_n(\boldsymbol{R})]\delta_{mn},\\
+                                    [\nabla_\boldsymbol{R}\langle\Psi_m(\boldsymbol{R})|]|\Psi_n(\boldsymbol{R})\rangle
+                                    E_n(\boldsymbol{R})
+                                    &amp;+\langle\Psi_m(\boldsymbol{R})|[\nabla_\boldsymbol{R}H(\boldsymbol{R})]|\Psi_n(\boldsymbol{R})\rangle\\
+                                    &amp;+E_m(\boldsymbol{R})\langle\Psi_m(\boldsymbol{R})|[\nabla_\boldsymbol{R}|\Psi_n(\boldsymbol{R})\rangle]
+                                    =[\nabla_\boldsymbol{R}E_n(\boldsymbol{R})]\delta_{mn},\\
+                                    \langle\Psi_m(\boldsymbol{R})|[\nabla_\boldsymbol{R}H(\boldsymbol{R})]|\Psi_n(\boldsymbol{R})\rangle
+                                    &amp;=[E_n(\boldsymbol{R})-E_m(\boldsymbol{R})]\langle\Psi_m(\boldsymbol{R})|\nabla_\boldsymbol{R}|\Psi_n(\boldsymbol{R})\rangle\\
+                                    &amp;\phantom{+}+[\nabla_\boldsymbol{R}E_n(\boldsymbol{R})]\delta_{mn},\\
+                                    \end{align*}\]</span> (i) <span
+                                    class="math inline">\(m=n\)</span>のとき
+                                    <span class="math display">\[
+                                    \langle\Psi_n(\boldsymbol{R})|[\nabla_\boldsymbol{R}H(\boldsymbol{R})]|\Psi_n(\boldsymbol{R})\rangle
+                                    =\nabla_\boldsymbol{R}E_n(\boldsymbol{R})
+                                    \]</span> (ii) <span
+                                    class="math inline">\(m\ne
+                                    n\)</span>のとき <span
+                                    class="math display">\[
+                                    \langle\Psi_m(\boldsymbol{R})|[\nabla_\boldsymbol{R}H(\boldsymbol{R})]|\Psi_n(\boldsymbol{R})\rangle
+                                    =[E_n(\boldsymbol{R})-E_m(\boldsymbol{R})]\langle\Psi_m(\boldsymbol{R})|\nabla_\boldsymbol{R}|\Psi_n(\boldsymbol{R})\rangle
+                                    \]</span> とくに<span
+                                    class="math inline">\(\boldsymbol{R}=\boldsymbol{R}_0\)</span>とおいて<span
+                                    class="math inline">\(E_n\equiv
+                                    E_n(\boldsymbol{R}_0),\Psi_n\equiv\Psi_n(\boldsymbol{R})\)</span>と書くと
+                                    <span class="math display">\[
+                                    \langle\Psi_m|[\nabla_\boldsymbol{R}H(\boldsymbol{R}_0)]|\Psi_n\rangle
+                                    =(E_n-E_m)\langle\Psi_m|\nabla_\boldsymbol{R}|\Psi_n\rangle
+                                    \]</span></p>
+                    </article>
+    </body>
+</html>
